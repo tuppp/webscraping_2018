@@ -1,23 +1,44 @@
 import numpy as np
-
 import unittest
+import validators
+import re
+import pdb
 
 
+def test(hi):
+    pdb.set_trace()
 
-
-def save(url, timestamp, postleitzahl, temperatur, niederschlagswahrscheinlichkeit, windgeschwindkeit, luftdruck, mintemperatur=None, maxtemperatur=None):
-
+def save(url, timestamp, postleitzahl, stadt, temperatur=None, niederschlagswahrscheinlichkeit=None, windgeschwindkeit=None,
+         luftdruck=None, mintemperatur=None, maxtemperatur=None):
     """save information to csv which is later saved to database
        wahrscheinlichkeiten [0,100]
        windgeschwindigkeit [km/h]
-       luftdruck  [hPa]
+       luftdruck  [hPa] - groundlevel
        temperatur [Grad Celsius]
+
+       timestamp: string
        """
+
 
     '''Exception Handling'''
 
-    if  type(url)!=str:
-        raise  Exception('url ist kein String')
+    if type(url) != str:
+        raise Exception('url ist kein String')
+
+    if not validators.url(url):
+        raise Exception('Deine Url ist keine Url. Bashed!!')
+
+    if re.match('\d{2}:\d{2}:\d{2}', timestamp):
+        raise Exception('Timestamp ist nicht korrekt.')
+
+    if (postleitzahl==None and stadt==None):
+        raise Exception("Bitte gebe eine Stadt oder eine PLZ an!")
+
+    if (postleitzahl!=None and len(postleitzahl)!=5):
+        raise Exception("Postleitzahl geht nur mit 5 Ziffern")
+
+    if (stadt!=None and  type(stadt)!=str):
+        raise Exception("Stadt ist kein String")
 
 
 
@@ -31,14 +52,11 @@ def save(url, timestamp, postleitzahl, temperatur, niederschlagswahrscheinlichke
 
 
 
-
-
     ''' save to CSV '''
 
 
 
-
-save(123, 1525785827, "61231", 23.4, 80.20, 200,  10, None, )
+save("http://www.google.de", "1525785827", "61231", "Berlin",  23.4, 80.20, 200, 10, None, )
 
 '''
 
