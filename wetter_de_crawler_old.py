@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+
 from urllib.request import urlopen
 import re
 
@@ -59,7 +62,9 @@ def put_list_into_file(all_msm):
     f.close()
 
 
-# get_all_bundeslaender()
-# get_all_locations_bl('https://www.wetter.de/deutschland/wetter-karte-baden-wuerttemberg-c49p8.html')
-# get_measurements("")
-print(get_all_measurements())
+if __name__ == "__main__":
+    print("Not working at the moment.")
+    # get_all_bundeslaender()
+    # get_all_locations_bl('https://www.wetter.de/deutschland/wetter-karte-baden-wuerttemberg-c49p8.html')
+    # get_measurements("")
+    # print(get_all_measurements())
