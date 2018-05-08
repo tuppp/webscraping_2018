@@ -19,7 +19,34 @@ def save(url, timestamp, postleitzahl, temperatur, niederschlagswahrscheinlichke
     if  type(url)!=str:
         raise  Exception('url ist kein String')
 
+    if  temperatur is None:
+        if mintemperatur == None:
+                if maxtemperatur == None:
+                    raise Exception("Bitte geben sie eine Temperatur oder eine Min- und Maxtemperatur an")
 
+    if temperatur is not None:
+        if type(temperatur) == float:
+            if(temperatur>200.0 or temperatur <-100.0):
+                raise Exception("Die Temperatur ist nicht realistisch")
+        else:
+            raise Exception("Temperatur ist kein Float")
+
+    if mintemperatur is not None:
+        if type(mintemperatur) == float:
+            if mintemperatur>200.0 or mintemperatur <-100.0:
+                raise Exception("Die minimal Temperatur ist nicht realistisch")
+        else:
+            raise Exception("Die minimal Temperatur ist kein Float")
+
+    if maxtemperatur is not None:
+        if type(maxtemperatur) == float:
+            if (maxtemperatur > 200.0 or maxtemperatur < -100.0):
+                raise Exception("Die maximal Temperatur ist nicht realistisch")
+        else:
+            raise Exception("Die maximal Temperatur ist kein Float")
+
+    if (maxtemperatur is None and type(mintemperatur)==float) or ( mintemperatur is None and type(maxtemperatur)==float):
+        raise Exception("Max und Mintemperatur können nur paarweise existieren.")
 
 
 
