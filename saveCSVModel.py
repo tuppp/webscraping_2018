@@ -19,8 +19,26 @@ def save(url, timestamp, postleitzahl, temperatur, niederschlagswahrscheinlichke
     if  type(url)!=str:
         raise  Exception('url ist kein String')
 
+    if niederschlagswahrscheinlichkeit is not None:
+        if type(niederschlagswahrscheinlichkeit)!=float:
+            raise Exception('niederschlagswahrscheinlichkeit kein float')
 
+        if niederschlagswahrscheinlichkeit < 0 or niederschlagswahrscheinlichkeit > 1:
+            raise Exception('niederschlagswahrscheinlichkeit nicht zwischen 0 und 1')
 
+    if windgeschwindkeit is not None:
+        if type(windgeschwindkeit)!=float:
+            raise Exception('windgeschwindigkeit kein float')
+
+        if windgeschwindkeit < 0 or windgeschwindkeit > 500:
+            raise Exception('windgeschwindigkeit nicht zwischen 0 und 500')
+
+    if luftdruck is not None:
+        if type(luftdruck)!=float:
+            raise Exception('luftdruck ist kein float')
+
+        if luftdruck < 0 or luftdruck > 1050:
+            raise Exception('luftdruck ist nicht zwischen 0 und 1050')
 
 
     ''' check day 
