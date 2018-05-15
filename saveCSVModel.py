@@ -36,6 +36,7 @@ def save(url, timestamp, postleitzahl=None, stadt=None, temperatur=None, nieders
     if type(timestamp) != float:
         raise Exception("Timestamp kein Float")
 
+
     if (postleitzahl==None and stadt==None):
         raise Exception("Bitte gebe eine Stadt oder eine PLZ an!")
 
