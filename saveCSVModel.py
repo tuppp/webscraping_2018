@@ -10,16 +10,16 @@ def test(hi):
     pdb.set_trace()
 
 
-def save(websitename, url, timestamp, timestamppred, postleitzahl=None, stadt=None, temperatur=None, niederschlagswahrscheinlichkeit=None, niederschlagsmenge=None, niederschlag=None, windgeschwindkeit=None,
+def save(websitename, url, timestamp, timestamppred, postleitzahl=None, stadt=None, temperatur=None, niederschlagswahrscheinlichkeit=None, niederschlagsmenge=None, niederschlag=None, windgeschwindigkeit=None,
          luftdruckground=None, luftdrucksea=None, mintemperatur=None, maxtemperatur=None, sonnenstunden=None, bewoelkung=None):
 
     """save information to csv which is later saved to database
 
         websitename(Bsp.: https://wetter.com als wettercom): String
         url: String
-        timestamp: Float
-        timestamppred: Float
-        postleitzahl: String len=5
+        timestamp(Zeitpunkt des Auslesens): Float
+        timestamppred(Zeitpunkt der Vorhersage): Float
+        postleitzahl: String
         stadt: String
         temperatur(in Celsius): Float [-100,200]
         niederschlagswahrscheinlichkeit: Float [0,100]
@@ -47,15 +47,11 @@ def save(websitename, url, timestamp, timestamppred, postleitzahl=None, stadt=No
     if not validators.url(url):
         raise Exception('Deine Url ist keine Url. Bashed!!')
 
-    #if re.match('\d{2}:\d{2}:\d{2}', timestamp):
-    #   raise Exception('Timestamp ist nicht korrekt.')
-
     if type(timestamp) != float:
         raise Exception("timestamp kein Float")
 
     if type(timestamppred) != float:
         raise Exception("timestamppred ist kein Float")
-
 
     if (postleitzahl==None and stadt==None):
         raise Exception("Bitte gebe eine Stadt oder eine PLZ an!")
@@ -116,11 +112,11 @@ def save(websitename, url, timestamp, timestamppred, postleitzahl=None, stadt=No
     if niederschlag != None and type(niederschlag) != str:
         raise Exception('niederschlag ist kein String')
 
-    if windgeschwindkeit is not None:
-        if type(windgeschwindkeit)!=float:
+    if windgeschwindigkeit is not None:
+        if type(windgeschwindigkeit)!=float:
             raise Exception('windgeschwindigkeit kein Float')
 
-        if windgeschwindkeit < 0 or windgeschwindkeit > 500:
+        if windgeschwindigkeit < 0 or windgeschwindigkeit > 500:
             raise Exception('windgeschwindigkeit nicht zwischen 0 und 500')
 
     if luftdruckground is not None:
@@ -163,12 +159,12 @@ def save(websitename, url, timestamp, timestamppred, postleitzahl=None, stadt=No
     else:
         csvfile=open(filename,'w')
         csvwriter = csv.writer(csvfile, delimiter=',')
-        csvwriter.writerow(["url", "timestamp", "timestamppred", "postleitzahl", "stadt", "temperatur", "niederschlagswahrscheinlichkeit", "niederschlagsmenge", "niederschlag", "windgeschwindkeit",
+        csvwriter.writerow(["url", "timestamp", "timestamppred", "postleitzahl", "stadt", "temperatur", "niederschlagswahrscheinlichkeit", "niederschlagsmenge", "niederschlag", "windgeschwindigkeit",
          "luftdruckground", "luftdrucksea", "mintemperatur", "maxtemperatur", "sonnenstunden", "bewoelkung"])
         csvwriter = csv.writer(csvfile, delimiter=',',quoting=csv.QUOTE_ALL)
 
     csvwriter.writerow(
-        [url, timestamp, timestamppred, postleitzahl, stadt, temperatur, niederschlagswahrscheinlichkeit, niederschlagsmenge, niederschlag, windgeschwindkeit,
+        [url, timestamp, timestamppred, postleitzahl, stadt, temperatur, niederschlagswahrscheinlichkeit, niederschlagsmenge, niederschlag, windgeschwindigkeit,
          luftdruckground, luftdrucksea, mintemperatur, maxtemperatur, sonnenstunden, bewoelkung])
 
 
@@ -189,7 +185,7 @@ def save(websitename, url, timestamp, timestamppred, postleitzahl=None, stadt=No
 
 
 
-save("googlecom", "http://www.google.de", timestamp=time.time(),timestamppred=time.time(),postleitzahl= "61231",stadt="Berlin",  maxtemperatur=23.4, niederschlagswahrscheinlichkeit=80.20, windgeschwindkeit=200.0,mintemperatur= 10.0 )
+save("googlecom", "http://www.google.de", timestamp=time.time(),timestamppred=time.time(),postleitzahl= "61231",stadt="Berlin",  maxtemperatur=23.4, niederschlagswahrscheinlichkeit=80.20, windgeschwindigkeit=200.0,mintemperatur= 10.0 )
 
 
 '''
