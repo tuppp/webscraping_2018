@@ -9,7 +9,7 @@ import datetime
 def test(hi):
     pdb.set_trace()
 
-def save(url, timestamp, postleitzahl=None, stadt=None, temperatur=None, niederschlagswahrscheinlichkeit=None, windgeschwindkeit=None,
+def save(url, timestamp, postleitzahl=None, stadt=None, temperatur=None, niederschlagswahrscheinlichkeit=None, windgeschwindigkeit=None,
          luftdruck=None, mintemperatur=None, maxtemperatur=None):
     """save information to csv which is later saved to database
        wahrscheinlichkeiten [0,100]
@@ -68,7 +68,7 @@ def save(url, timestamp, postleitzahl=None, stadt=None, temperatur=None, nieders
             raise Exception("Die maximal Temperatur ist kein Float")
 
     if (maxtemperatur is None and type(mintemperatur)==float) or ( mintemperatur is None and type(maxtemperatur)==float):
-        raise Exception("Max und Mintemperatur können nur paarweise existieren.")
+        raise Exception("Max und Mintemperatur koennen nur paarweise existieren.")
 
     if (stadt!=None and  type(stadt)!=str):
         raise Exception("Stadt ist kein String")
@@ -127,32 +127,5 @@ def save(url, timestamp, postleitzahl=None, stadt=None, temperatur=None, nieders
     ''' save to CSV '''
 
 
-save("http://www.google.de", timestamp=datetime.datetime.now(),postleitzahl= "61231",stadt="Berlin",  maxtemperatur=23.4, niederschlagswahrscheinlichkeit=80.20, windgeschwindkeit=200.0,mintemperatur= 10.0 )
-
-'''
 
 
-
-class TestStringMethods(unittest.TestCase):
-    
-    
-    def test_plzkorrekt(selfs):
-        save()
-
-    def test_upper(self):
-        self.assertEqual('foo'.upper(), 'FOO')
-
-    def test_isupper(self):
-        self.assertTrue('FOO'.isupper())
-        self.assertFalse('Foo'.isupper())
-
-    def test_split(self):
-        s = 'hello world'
-        self.assertEqual(s.split(), ['hello', 'world'])
-        # check that s.split fails when the separator is not a string
-        with self.assertRaises(TypeError):
-            s.split(2)
-
-if __name__ == '__main__':
-    unittest.main()
-'''
