@@ -32,6 +32,9 @@ def save(url, timestamp, postleitzahl=None, stadt=None, temperatur=None, nieders
     #if re.match('\d{2}:\d{2}:\d{2}', timestamp):
     #   raise Exception('Timestamp ist nicht korrekt.')
 
+    if type(timestamp) != float:
+        raise Exception("Timestamp ist kein Float")
+
     if (postleitzahl==None and stadt==None):
         raise Exception("Bitte gebe eine Stadt oder eine PLZ an!")
 
