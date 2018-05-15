@@ -135,6 +135,10 @@ def save(url, timestamp, timestamppred, postleitzahl=None, stadt=None, temperatu
             raise Exception('sonnenstunden ist nicht zwischen 0 und 24')
 
     format=time.localtime(timestamp)
+    if not os.path.exists("data"):
+        os.makedirs("data")
+
+    os.chdir("data")
     filename=str(format.tm_mday)+"-"+str(format.tm_mon)+"-"+ str(format.tm_year)
     csvfile=None
     csvwriter=None
