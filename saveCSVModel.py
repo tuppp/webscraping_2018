@@ -5,12 +5,14 @@ import pdb
 import os
 import csv
 import datetime
+import time
 def test(hi):
     pdb.set_trace()
 
 def save(url, timestamp, timestamppred, postleitzahl=None, stadt=None, temperatur=None, niederschlagswahrscheinlichkeit=None, niederschlag=None, windgeschwindkeit=None,
          luftdruckground=None, luftdrucksea=None, mintemperatur=None, maxtemperatur=None, sonnenstunden=None, bewölkung=None):
     """save information to csv which is later saved to database
+
         url: String
         timestamp: float
         timestamppred: float
@@ -26,6 +28,7 @@ def save(url, timestamp, timestamppred, postleitzahl=None, stadt=None, temperatu
         maxtemperatur(in Celsius): float [-100,200]
         sonnenstunden: float [0,24]
         bewölkung(in h): float [0,24]
+
        """
 
 
@@ -39,6 +42,10 @@ def save(url, timestamp, timestamppred, postleitzahl=None, stadt=None, temperatu
 
     #if re.match('\d{2}:\d{2}:\d{2}', timestamp):
     #   raise Exception('Timestamp ist nicht korrekt.')
+
+    if type(timestamp) != float:
+        raise Exception("Timestamp kein Float")
+
 
     if (postleitzahl==None and stadt==None):
         raise Exception("Bitte gebe eine Stadt oder eine PLZ an!")
@@ -127,11 +134,10 @@ def save(url, timestamp, timestamppred, postleitzahl=None, stadt=None, temperatu
         if bewölkung < 0.0 or bewölkung > 24.0:
             raise Exception('sonnenstunden ist nicht zwischen 0 und 24')
 
-    filename=str(timestamp.day) + "-" + str(timestamp.month)+"."+ str(timestamp.year)
-
+    format=time.localtime(timestamp)
+    filename=str(format.tm_mday)+"-"+str(format.tm_mon)+"-"+ str(format.tm_year)
     csvfile=None
     csvwriter=None
-    print(filename)
     if os.path.exists(filename):
         csvfile=open(filename,'a')
         csvwriter = csv.writer(csvfile, delimiter=',')
@@ -144,6 +150,7 @@ def save(url, timestamp, timestamppred, postleitzahl=None, stadt=None, temperatu
     csvwriter.writerow(
         [url, timestamp, timestamppred, postleitzahl, stadt, temperatur, niederschlagswahrscheinlichkeit, niederschlag, windgeschwindkeit,
          luftdruckground, luftdrucksea, mintemperatur, maxtemperatur, sonnenstunden, bewölkung])
+
 
     csvfile.close()
 
@@ -160,7 +167,9 @@ def save(url, timestamp, timestamppred, postleitzahl=None, stadt=None, temperatu
     ''' save to CSV '''
 
 
-save("http://www.google.de", timestamp=datetime.datetime.now(), timestamppred=datetime.datetime.now(), postleitzahl= "61231",stadt="Berlin",  maxtemperatur=23.4, niederschlagswahrscheinlichkeit=80.20, windgeschwindkeit=200.0,mintemperatur= 10.0 )
+
+save("http://www.google.de", timestamp=time.time(),postleitzahl= "61231",stadt="Berlin",  maxtemperatur=23.4, niederschlagswahrscheinlichkeit=80.20, windgeschwindkeit=200.0,mintemperatur= 10.0 )
+
 
 '''
 
