@@ -1,4 +1,3 @@
-import numpy as np
 import unittest
 import validators
 import re
@@ -6,18 +5,31 @@ import pdb
 import os
 import csv
 import datetime
+import time
 def test(hi):
     pdb.set_trace()
 
-def save(url, timestamp, postleitzahl=None, stadt=None, temperatur=None, niederschlagswahrscheinlichkeit=None, windgeschwindigkeit=None,
-         luftdruck=None, mintemperatur=None, maxtemperatur=None):
-    """save information to csv which is later saved to database
-       wahrscheinlichkeiten [0,100]
-       windgeschwindigkeit [km/h]
-       luftdruck  [hPa] - groundlevel
-       temperatur [Grad Celsius]
 
-       timestamp: string
+def save(url, timestamp, timestamppred, postleitzahl=None, stadt=None, temperatur=None, niederschlagswahrscheinlichkeit=None, niederschlag=None, windgeschwindkeit=None,
+         luftdruckground=None, luftdrucksea=None, mintemperatur=None, maxtemperatur=None, sonnenstunden=None, bewölkung=None):
+    """save information to csv which is later saved to database
+
+        url: String
+        timestamp: float
+        timestamppred: float
+        postleitzahl: String len=5
+        stadt: String
+        temperatur(in Celsius): float [-100,200]
+        niederschlagswahrscheinlichkeit: float [0,100]
+        niederschlag: String
+        windgeschwindigkeit(in km/h): float [0,500]
+        luftdruckground(in hPa on groundlevel): float [0,1050]
+        luftdrucksea(in hPa on sealevel): float [0,1050]
+        mintemperatur(in Celsius): float [-100,200]
+        maxtemperatur(in Celsius): float [-100,200]
+        sonnenstunden: float [0,24]
+        bewölkung(in h): float [0,24]
+
        """
 
 
@@ -33,15 +45,20 @@ def save(url, timestamp, postleitzahl=None, stadt=None, temperatur=None, nieders
     #   raise Exception('Timestamp ist nicht korrekt.')
 
     if type(timestamp) != float:
-        raise Exception("Timestamp ist kein Float")
+        raise Exception("Timestamp kein Float")
+
 
     if (postleitzahl==None and stadt==None):
         raise Exception("Bitte gebe eine Stadt oder eine PLZ an!")
 
-    if (postleitzahl!=None and len(postleitzahl)!=5):
-        raise Exception("Postleitzahl geht nur mit 5 Ziffern")
+    if postleitzahl!=None:
+        if type(postleitzahl) != str:
+            raise Exception('postleitzahl ist kein String')
 
-    if  temperatur is None:
+        if len(postleitzahl)!=5:
+            raise Exception("Postleitzahl geht nur mit 5 Ziffern")
+
+    if temperatur is None:
         if mintemperatur == None:
                 if maxtemperatur == None:
                     raise Exception("Bitte geben sie eine Temperatur oder eine Min- und Maxtemperatur an")
@@ -77,9 +94,11 @@ def save(url, timestamp, postleitzahl=None, stadt=None, temperatur=None, nieders
         if type(niederschlagswahrscheinlichkeit)!=float:
             raise Exception('niederschlagswahrscheinlichkeit kein float')
 
-
         if niederschlagswahrscheinlichkeit < 0.0 or niederschlagswahrscheinlichkeit > 100.0:
             raise Exception('niederschlagswahrscheinlichkeit nicht zwischen 0 und 100')
+
+    if niederschlag != None and type(niederschlag) != str:
+        raise Exception('niederschlag ist kein String')
 
     if windgeschwindkeit is not None:
         if type(windgeschwindkeit)!=float:
@@ -88,29 +107,55 @@ def save(url, timestamp, postleitzahl=None, stadt=None, temperatur=None, nieders
         if windgeschwindkeit < 0 or windgeschwindkeit > 500:
             raise Exception('windgeschwindigkeit nicht zwischen 0 und 500')
 
-    if luftdruck is not None:
-        if type(luftdruck)!=float:
-            raise Exception('luftdruck ist kein float')
+    if luftdruckground is not None:
+        if type(luftdruckground)!=float:
+            raise Exception('luftdruckground ist kein float')
 
-        if luftdruck < 0 or luftdruck > 1050:
+        if luftdruckground < 0 or luftdruckground > 1050:
             raise Exception('luftdruck ist nicht zwischen 0 und 1050')
-    filename=str(timestamp.day) + "-" + str(timestamp.month)+"."+ str(timestamp.year)
 
+    if luftdrucksea is not None:
+        if type(luftdrucksea) != float:
+            raise Exception('luftdrucksea ist kein float')
+
+        if luftdrucksea < 0 or luftdrucksea > 1050:
+            raise Exception('luftdruck ist nicht zwischen 0 und 1050')
+
+    if sonnenstunden is not None:
+        if type(sonnenstunden) != float:
+            raise Exception('sonnenstunden ist kein float')
+
+        if sonnenstunden < 0.0 or sonnenstunden > 24.0:
+            raise Exception('sonnenstunden ist nicht zwischen 0 und 24')
+
+    if bewölkung is not None:
+        if type(bewölkung) != float:
+            raise Exception('sonnenstunden ist kein float')
+
+        if bewölkung < 0.0 or bewölkung > 24.0:
+            raise Exception('sonnenstunden ist nicht zwischen 0 und 24')
+
+    format=time.localtime(timestamp)
+    if not os.path.exists("data"):
+        os.makedirs("data")
+
+    os.chdir("data")
+    filename=str(format.tm_mday)+"-"+str(format.tm_mon)+"-"+ str(format.tm_year)
     csvfile=None
     csvwriter=None
-    print(filename)
     if os.path.exists(filename):
         csvfile=open(filename,'a')
         csvwriter = csv.writer(csvfile, delimiter=',')
     else:
         csvfile=open(filename,'w')
         csvwriter = csv.writer(csvfile, delimiter=',')
-        csvwriter.writerow(["url", "timestamp", "postleitzahl", "stadt", "temperatur", "niederschlagswahrscheinlichkeit", "windgeschwindkeit",
-         "luftdruck", "mintemperatur", "maxtemperatur"])
+        csvwriter.writerow(["url", "timestamp", "timestamppred", "postleitzahl", "stadt", "temperatur", "niederschlagswahrscheinlichkeit", "niederschlag", "windgeschwindkeit",
+         "luftdruckground", "luftdrucksea", "mintemperatur", "maxtemperatur", "sonnenstunden", "bewölkung"])
 
     csvwriter.writerow(
-        [url, timestamp, postleitzahl, stadt, temperatur, niederschlagswahrscheinlichkeit, windgeschwindkeit,
-         luftdruck, mintemperatur, maxtemperatur])
+        [url, timestamp, timestamppred, postleitzahl, stadt, temperatur, niederschlagswahrscheinlichkeit, niederschlag, windgeschwindkeit,
+         luftdruckground, luftdrucksea, mintemperatur, maxtemperatur, sonnenstunden, bewölkung])
+
 
     csvfile.close()
 
@@ -125,7 +170,6 @@ def save(url, timestamp, postleitzahl=None, stadt=None, temperatur=None, nieders
 
 
     ''' save to CSV '''
-
 
 
 
