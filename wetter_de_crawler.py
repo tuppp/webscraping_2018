@@ -2,9 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from urllib.request import urlopen
-from urllib.error import URLError
-from datetime import datetime
-from socket import timeout
 from lxml import etree
 
 
@@ -29,7 +26,7 @@ def city_url(plz: int) -> str:
     links = tree.xpath("//a[starts-with(@id,'location-')]/@href")
 
     url = links[0]
-    url = url.replace(".html", "/wetterbericht-aktuell.html")
+    url = url.replace(".html", "/wetter-uebersicht.html")
 
     return url
 
@@ -44,15 +41,6 @@ def main():
     url = city_url(14656)
     print(url)
     parse_city(url)
-
-    try:
-        pass
-    except URLError:
-        print("URLError.", str(datetime.today()))
-        exit(1)
-    except timeout:
-        print("Timeout while getting html.", str(datetime.today()))
-        exit(1)
 
 
 if __name__ == "__main__":
