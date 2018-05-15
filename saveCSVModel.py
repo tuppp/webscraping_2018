@@ -3,12 +3,13 @@ import unittest
 import validators
 import re
 import pdb
-
-
+import os
+import csv
+import datetime
 def test(hi):
     pdb.set_trace()
 
-def save(url, timestamp, postleitzahl, stadt, temperatur=None, niederschlagswahrscheinlichkeit=None, windgeschwindkeit=None,
+def save(url, timestamp, postleitzahl=None, stadt=None, temperatur=None, niederschlagswahrscheinlichkeit=None, windgeschwindkeit=None,
          luftdruck=None, mintemperatur=None, maxtemperatur=None):
     """save information to csv which is later saved to database
        wahrscheinlichkeiten [0,100]
@@ -28,8 +29,11 @@ def save(url, timestamp, postleitzahl, stadt, temperatur=None, niederschlagswahr
     if not validators.url(url):
         raise Exception('Deine Url ist keine Url. Bashed!!')
 
-    if re.match('\d{2}:\d{2}:\d{2}', timestamp):
-        raise Exception('Timestamp ist nicht korrekt.')
+    #if re.match('\d{2}:\d{2}:\d{2}', timestamp):
+    #   raise Exception('Timestamp ist nicht korrekt.')
+
+    if type(timestamp) != float:
+        raise Exception("Timestamp ist kein Float")
 
     if (postleitzahl==None and stadt==None):
         raise Exception("Bitte gebe eine Stadt oder eine PLZ an!")
@@ -74,8 +78,8 @@ def save(url, timestamp, postleitzahl, stadt, temperatur=None, niederschlagswahr
             raise Exception('niederschlagswahrscheinlichkeit kein float')
 
 
-        if niederschlagswahrscheinlichkeit < 0 or niederschlagswahrscheinlichkeit > 1:
-            raise Exception('niederschlagswahrscheinlichkeit nicht zwischen 0 und 1')
+        if niederschlagswahrscheinlichkeit < 0.0 or niederschlagswahrscheinlichkeit > 100.0:
+            raise Exception('niederschlagswahrscheinlichkeit nicht zwischen 0 und 100')
 
     if windgeschwindkeit is not None:
         if type(windgeschwindkeit)!=float:
@@ -90,6 +94,26 @@ def save(url, timestamp, postleitzahl, stadt, temperatur=None, niederschlagswahr
 
         if luftdruck < 0 or luftdruck > 1050:
             raise Exception('luftdruck ist nicht zwischen 0 und 1050')
+    filename=str(timestamp.day) + "-" + str(timestamp.month)+"."+ str(timestamp.year)
+
+    csvfile=None
+    csvwriter=None
+    print(filename)
+    if os.path.exists(filename):
+        csvfile=open(filename,'a')
+        csvwriter = csv.writer(csvfile, delimiter=',')
+    else:
+        csvfile=open(filename,'w')
+        csvwriter = csv.writer(csvfile, delimiter=',')
+        csvwriter.writerow(["url", "timestamp", "postleitzahl", "stadt", "temperatur", "niederschlagswahrscheinlichkeit", "windgeschwindkeit",
+         "luftdruck", "mintemperatur", "maxtemperatur"])
+
+    csvwriter.writerow(
+        [url, timestamp, postleitzahl, stadt, temperatur, niederschlagswahrscheinlichkeit, windgeschwindkeit,
+         luftdruck, mintemperatur, maxtemperatur])
+
+    csvfile.close()
+
 
 
     ''' check day 
@@ -103,11 +127,9 @@ def save(url, timestamp, postleitzahl, stadt, temperatur=None, niederschlagswahr
     ''' save to CSV '''
 
 
-
-save("http://www.google.de", "1525785827", "61231", "Berlin",  23.4, 80.20, 200, 10, None, )
+save("http://www.google.de", timestamp=datetime.datetime.now(),postleitzahl= "61231",stadt="Berlin",  maxtemperatur=23.4, niederschlagswahrscheinlichkeit=80.20, windgeschwindkeit=200.0,mintemperatur= 10.0 )
 
 '''
-
 
 
 
