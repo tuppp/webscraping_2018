@@ -6,6 +6,7 @@ import pdb
 import os
 import csv
 import datetime
+import time
 def test(hi):
     pdb.set_trace()
 
@@ -17,7 +18,7 @@ def save(url, timestamp, postleitzahl=None, stadt=None, temperatur=None, nieders
        luftdruck  [hPa] - groundlevel
        temperatur [Grad Celsius]
 
-       timestamp: string
+       timestamp: float
        """
 
 
@@ -31,6 +32,9 @@ def save(url, timestamp, postleitzahl=None, stadt=None, temperatur=None, nieders
 
     #if re.match('\d{2}:\d{2}:\d{2}', timestamp):
     #   raise Exception('Timestamp ist nicht korrekt.')
+
+    if type(timestamp) != float:
+        raise Exception("Timestamp kein Float")
 
     if (postleitzahl==None and stadt==None):
         raise Exception("Bitte gebe eine Stadt oder eine PLZ an!")
@@ -91,11 +95,10 @@ def save(url, timestamp, postleitzahl=None, stadt=None, temperatur=None, nieders
 
         if luftdruck < 0 or luftdruck > 1050:
             raise Exception('luftdruck ist nicht zwischen 0 und 1050')
-    filename=str(timestamp.day) + "-" + str(timestamp.month)+"."+ str(timestamp.year)
-
+    format=time.localtime(timestamp)
+    filename=str(format.tm_mday)+"-"+str(format.tm_mon)+"-"+ str(format.tm_year)
     csvfile=None
     csvwriter=None
-    print(filename)
     if os.path.exists(filename):
         csvfile=open(filename,'a')
         csvwriter = csv.writer(csvfile, delimiter=',')
@@ -106,7 +109,7 @@ def save(url, timestamp, postleitzahl=None, stadt=None, temperatur=None, nieders
          "luftdruck", "mintemperatur", "maxtemperatur"])
 
     csvwriter.writerow(
-        [url, timestamp, postleitzahl, stadt, temperatur, niederschlagswahrscheinlichkeit, windgeschwindkeit,
+        [url,timestamp, postleitzahl, stadt, temperatur, niederschlagswahrscheinlichkeit, windgeschwindkeit,
          luftdruck, mintemperatur, maxtemperatur])
 
     csvfile.close()
@@ -124,7 +127,7 @@ def save(url, timestamp, postleitzahl=None, stadt=None, temperatur=None, nieders
     ''' save to CSV '''
 
 
-save("http://www.google.de", timestamp=datetime.datetime.now(),postleitzahl= "61231",stadt="Berlin",  maxtemperatur=23.4, niederschlagswahrscheinlichkeit=80.20, windgeschwindkeit=200.0,mintemperatur= 10.0 )
+save("http://www.google.de", timestamp=time.time(),postleitzahl= "61231",stadt="Berlin",  maxtemperatur=23.4, niederschlagswahrscheinlichkeit=80.20, windgeschwindkeit=200.0,mintemperatur= 10.0 )
 
 '''
 
