@@ -159,12 +159,13 @@ def save(websitename, url, timestamp, timestamppred, postleitzahl=None, stadt=No
     csvwriter=None
     if os.path.exists(filename):
         csvfile=open(filename,'a')
-        csvwriter = csv.writer(csvfile, delimiter=',')
+        csvwriter = csv.writer(csvfile, delimiter=',',quoting=csv.QUOTE_ALL)
     else:
         csvfile=open(filename,'w')
         csvwriter = csv.writer(csvfile, delimiter=',')
         csvwriter.writerow(["url", "timestamp", "timestamppred", "postleitzahl", "stadt", "temperatur", "niederschlagswahrscheinlichkeit", "niederschlagsmenge", "niederschlag", "windgeschwindkeit",
          "luftdruckground", "luftdrucksea", "mintemperatur", "maxtemperatur", "sonnenstunden", "bewoelkung"])
+        csvwriter = csv.writer(csvfile, delimiter=',',quoting=csv.QUOTE_ALL)
 
     csvwriter.writerow(
         [url, timestamp, timestamppred, postleitzahl, stadt, temperatur, niederschlagswahrscheinlichkeit, niederschlagsmenge, niederschlag, windgeschwindkeit,
