@@ -168,7 +168,7 @@ def save(url, timestamp, timestamppred, postleitzahl=None, stadt=None, temperatu
 
 
 
-save("http://www.google.de", timestamp=time.time(),postleitzahl= "61231",stadt="Berlin",  maxtemperatur=23.4, niederschlagswahrscheinlichkeit=80.20, windgeschwindkeit=200.0,mintemperatur= 10.0 )
+save("http://www.google.de", timestamp=time.time(),timestamppred=time.time(),postleitzahl= "61231",stadt="Berlin",  maxtemperatur=23.4, niederschlagswahrscheinlichkeit=80.20, windgeschwindkeit=200.0,mintemperatur= 10.0 )
 
 
 '''
