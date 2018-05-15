@@ -12,14 +12,15 @@ import requests
 import datetime
 import os
 import json
+import pdb
 
 dateString = datetime.datetime.today().strftime('%Y-%m-%d');
 localJsonSavePath = "openweather"+dateString+".txt";
 
 def kelvin_to_celcius(k_temp):
-        return (k_temp + 273,15)
+        return (k_temp - 273.15)
 def meter_per_second_to_km_per_h(speed):
-    return 3,6 * speed;
+    return 3.6 * speed;
 
 def getOpenWeatherMapData():
     print("wir holen daten von openweathermap.org per API")
@@ -77,9 +78,10 @@ def getOpenWeatherMapData():
                 
                 #save relevant data to csv file
                 print(stadt,timestamp,temperatur,mintemperatur,maxtemperatur,windgeschwindigkeit,luftdruck,niederschlagswahrscheinlichkeit);
-                
-                #save(url, timestamp, postleitzahl, stadt, temperatur, niederschlagswahrscheinlichkeit, windgeschwindigkeit,luftdruck, mintemperatur, maxtemperatur);
-        
+
+                return stadt,timestamp,temperatur,mintemperatur,maxtemperatur,windgeschwindigkeit,luftdruck,niederschlagswahrscheinlichkeit
+
+
         
         else:
           # If response code is not ok (200), print the resulting http error code with description

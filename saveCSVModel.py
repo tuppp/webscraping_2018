@@ -9,8 +9,10 @@ import time
 def test(hi):
     pdb.set_trace()
 
+
 def save(websitename, url, timestamp, timestamppred, postleitzahl=None, stadt=None, temperatur=None, niederschlagswahrscheinlichkeit=None, niederschlagsmenge=None, niederschlag=None, windgeschwindkeit=None,
          luftdruckground=None, luftdrucksea=None, mintemperatur=None, maxtemperatur=None, sonnenstunden=None, bewoelkung=None):
+
     """save information to csv which is later saved to database
 
         websitename(Bsp.: https://wetter.com als wettercom): String
@@ -92,7 +94,7 @@ def save(websitename, url, timestamp, timestamppred, postleitzahl=None, stadt=No
             raise Exception("maxtemperatur ist kein Float")
 
     if (maxtemperatur is None and type(mintemperatur)==float) or ( mintemperatur is None and type(maxtemperatur)==float):
-        raise Exception("Max und Mintemperatur können nur paarweise existieren.")
+        raise Exception("Max und Mintemperatur koennen nur paarweise existieren.")
 
     if (stadt!=None and  type(stadt)!=str):
         raise Exception("stadt ist kein String")
@@ -146,7 +148,13 @@ def save(websitename, url, timestamp, timestamppred, postleitzahl=None, stadt=No
         raise Exception('bewölkung ist kein String')
 
     format=time.localtime(timestamp)
+
+    if not os.path.exists("data"):
+        os.makedirs("data")
+
+    os.chdir("data")
     filename=str(format.tm_mday)+"-"+str(format.tm_mon)+"-"+ str(format.tm_year) +"_" + websitename
+
     csvfile=None
     csvwriter=None
     if os.path.exists(filename):
@@ -176,6 +184,7 @@ def save(websitename, url, timestamp, timestamppred, postleitzahl=None, stadt=No
 
 
     ''' save to CSV '''
+
 
 
 
@@ -209,3 +218,4 @@ class TestStringMethods(unittest.TestCase):
 if __name__ == '__main__':
     unittest.main()
 '''
+
