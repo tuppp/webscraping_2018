@@ -103,7 +103,7 @@ def get_all_predictions(url):
         niederschlagwkt = string_to_float(split72[0])
         sun_duration = string_to_float(split6fin)
         weather_state = string_to_float(split52[0])
-        
+
 
 
         c = saveCSVModel.saveData()
