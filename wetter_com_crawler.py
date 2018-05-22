@@ -107,7 +107,11 @@ def get_all_predictions(url):
 
 
         c = saveCSVModel.saveData()
+<<<<<<< HEAD
         c.save(websitename="wetter_com",url="https://www.wetter.com",timestamp=time.time(),timestamppred=date,postleitzahl=plz,niederschlagsmenge=niederschlag,sonnenstunden=sun_duration,niederschlagswahrscheinlichkeit=niederschlagwkt,mintemperatur=temp_min,maxtemperatur=temp_max)
+=======
+        c.save(websitename="wetter_com",url="https://www.wetter.com",timestamp=time.time(), timestamppred=date,postleitzahl=plz,niederschlagswahrscheinlichkeit=niederschlagwkt,mintemperatur=temp_min,maxtemperatur=temp_max)
+>>>>>>> 6a613f68433116d6cda15d95d15d0d0721cf602d
 
 
 

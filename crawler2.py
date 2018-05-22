@@ -3,7 +3,8 @@ from urllib.request import urlopen
 import re
 import time
 import datetime
-
+import pandas as pd
+from dateutil.parser import parse
 import saveCSVModel
 
 def bereinigen(str):
@@ -84,12 +85,12 @@ def getDataForPlz(plz):
         nList.append(data)
 
 
-
     print (nList)
 
     c = saveCSVModel.saveData()
     for x in nList:
-        c.save(url=x["url"], timestamp = time.time(), timestamppred = datetime.datetime.strptime(x["date"], "%d.%m.%Y"), stadt="Berlin", mintemperatur= x["mintemp"], maxtemperatur= x["maxtemp"], websitename="WETTERCOM")
+
+        c.save(url=x["url"], timestamp = time.time(), timestamppred = datetime.datetime.strptime(x["date"], "%d.%m.%Y").timestamp(), stadt="Berlin", mintemperatur= x["mintemp"], maxtemperatur= x["maxtemp"], websitename="WETTERCOM")
 
 
 getDataForPlz("10247")
