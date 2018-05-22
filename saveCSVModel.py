@@ -1,42 +1,41 @@
-import unittest
 import validators
-import re
 import pdb
 import os
 import csv
-import datetime
 import time
-def test(hi):
+
+
+def test(*_):
     pdb.set_trace()
 
 
 def save(websitename, url, timestamp, timestamppred, postleitzahl=None, stadt=None, temperatur=None, niederschlagswahrscheinlichkeit=None, niederschlagsmenge=None, niederschlag=None, windgeschwindigkeit=None,
          luftdruckground=None, luftdrucksea=None, mintemperatur=None, maxtemperatur=None, sonnenstunden=None, bewoelkung=None):
 
-    """save information to csv which is later saved to database
+    """
+    save information to csv which is later saved to database
 
-        websitename(Bsp.: https://wetter.com als wettercom): String
-        url: String
-        timestamp(Zeitpunkt des Auslesens): Float
-        timestamppred(Zeitpunkt der Vorhersage): Float
-        postleitzahl: String
-        stadt: String
-        temperatur(in Celsius): Float [-100,200]
-        niederschlagswahrscheinlichkeit: Float [0,100]
-        niederschlagsmenge(in mm): Float [0,2000]
-        niederschlag: String
-        windgeschwindigkeit(in km/h): Float [0,500]
-        luftdruckground(in hPa on groundlevel): Float [0,1050]
-        luftdrucksea(in hPa on sealevel): Float [0,1050]
-        mintemperatur(in Celsius): Float [-100,200]
-        maxtemperatur(in Celsius): Float [-100,200]
-        sonnenstunden: Float [0,24]
-        bewoelkung: Sting
+    websitename(Bsp.: https://wetter.com als wettercom): String
+    url: String
+    timestamp(Zeitpunkt des Auslesens): Float
+    timestamppred(Zeitpunkt der Vorhersage): Float
+    postleitzahl: String
+    stadt: String
+    temperatur(in Celsius): Float [-100,200]
+    niederschlagswahrscheinlichkeit: Float [0,100]
+    niederschlagsmenge(in mm): Float [0,2000]
+    niederschlag: String
+    windgeschwindigkeit(in km/h): Float [0,500]
+    luftdruckground(in hPa on groundlevel): Float [0,1050]
+    luftdrucksea(in hPa on sealevel): Float [0,1050]
+    mintemperatur(in Celsius): Float [-100,200]
+    maxtemperatur(in Celsius): Float [-100,200]
+    sonnenstunden: Float [0,24]
+    bewoelkung: Sting
 
-       """
+    """
 
-
-    '''Exception Handling'''
+    # Exception Handling
 
     if type(websitename) != str:
         raise Exception('websitename ist kein String')
@@ -53,6 +52,7 @@ def save(websitename, url, timestamp, timestamppred, postleitzahl=None, stadt=No
     if type(timestamppred) != float:
         raise Exception("timestamppred ist kein Float")
 
+    # TODO: "variable is (not) None" anstatt "==" und "!="
     if (postleitzahl==None and stadt==None):
         raise Exception("Bitte gebe eine Stadt oder eine PLZ an!")
 
@@ -154,10 +154,10 @@ def save(websitename, url, timestamp, timestamppred, postleitzahl=None, stadt=No
     csvfile=None
     csvwriter=None
     if os.path.exists(filename):
-        csvfile=open(filename,'a')
+        csvfile=open(filename, 'a')
         csvwriter = csv.writer(csvfile, delimiter=',',quoting=csv.QUOTE_ALL)
     else:
-        csvfile=open(filename,'w')
+        csvfile=open(filename, 'w')
         csvwriter = csv.writer(csvfile, delimiter=',')
         csvwriter.writerow(["url", "timestamp", "timestamppred", "postleitzahl", "stadt", "temperatur", "niederschlagswahrscheinlichkeit", "niederschlagsmenge", "niederschlag", "windgeschwindigkeit",
          "luftdruckground", "luftdrucksea", "mintemperatur", "maxtemperatur", "sonnenstunden", "bewoelkung"])
@@ -185,7 +185,7 @@ def save(websitename, url, timestamp, timestamppred, postleitzahl=None, stadt=No
 
 
 
-save("googlecom", "http://www.google.de", timestamp=time.time(),timestamppred=time.time(),postleitzahl= "61231",stadt="Berlin",  maxtemperatur=23.4, niederschlagswahrscheinlichkeit=80.20, windgeschwindigkeit=200.0,mintemperatur= 10.0 )
+# save("googlecom", "http://www.google.de", timestamp=time.time(),timestamppred=time.time(),postleitzahl= "61231",stadt="Berlin",  maxtemperatur=23.4, niederschlagswahrscheinlichkeit=80.20, windgeschwindigkeit=200.0,mintemperatur= 10.0 )
 
 
 '''
