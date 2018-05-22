@@ -25,6 +25,17 @@ def kelvin_to_celcius(k_temp):
 def meter_per_second_to_km_per_h(speed):
     return 3.6 * speed;
 
+def saveRawJsonResponse(obj):
+    if not os.path.exists("raw_data"):
+        os.makedirs("raw_data")
+
+    if (os.path.exists("raw_data/" + localJsonSavePath)):
+        with open("raw_data/" + localJsonSavePath, 'a') as outfile:
+            json.dump(obj, outfile);
+    else:
+        with open("raw_data/" +localJsonSavePath, 'w') as outfile:
+            json.dump(obj, outfile);
+
 def getOpenWeatherMapData():
     
     print("wir holen daten von openweathermap.org per API")
@@ -51,13 +62,7 @@ def getOpenWeatherMapData():
         if(myResponse.ok):
             obj = myResponse.json(); 
 
-            #save everything locally
-            #if (os.path.exists(localJsonSavePath)):
-            #    with open(localJsonSavePath, 'a') as outfile:
-            #        json.dump(obj, outfile);
-            #else:
-            #    with open(localJsonSavePath, 'w') as outfile:
-            #        json.dump(obj, outfile);
+            saveRawJsonResponse(obj);
             
             lat  = obj["city"]["coord"]["lat"];
             lang = obj["city"]["coord"]["lon"];
