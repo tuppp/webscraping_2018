@@ -40,7 +40,7 @@ def string_to_float(string_s):
     if len(value) == 0 :
         return float(0)
     else:
-        return value[0]
+        return float(value[0])
 
 
 
@@ -77,6 +77,7 @@ def get_all_predictions(url):
         split62 = split6[1].split('</dd>')
         split63 = split62[0].split("<dd>")
         split6fin = split63[1]
+        print(split6fin)
 
 
         split7 = html.split('title="Niederschlagswahrscheinlichkeit">')
@@ -100,24 +101,13 @@ def get_all_predictions(url):
             niederschlag = "0"
         niederschlag = string_to_float(niederschlag)
         niederschlagwkt = string_to_float(split72[0])
-        sun_duration = string_to_float(split6fin [0])
+        sun_duration = string_to_float(split6fin)
         weather_state = string_to_float(split52[0])
+        
 
-
-
-        print(date)
-        print (temp_min)
-        print(type(temp_min))
-        print (temp_max)
-        print(niederschlag)
-        print(sun_duration)
-        print(niederschlagwkt)
-        print(weather_state)
-
-        war_start = '2011-01-03'
 
         c = saveCSVModel.saveData()
-        c.save(websitename="wetter_com",url="https://www.wetter.com",timestamp=time.time(),timestamppred=date,postleitzahl=plz,niederschlagswahrscheinlichkeit=niederschlagwkt,mintemperatur=temp_min,maxtemperatur=temp_max)
+        c.save(websitename="wetter_com",url="https://www.wetter.com",timestamp=time.time(),timestamppred=date,postleitzahl=plz,niederschlagsmenge=niederschlag,sonnenstunden=sun_duration,niederschlagswahrscheinlichkeit=niederschlagwkt,mintemperatur=temp_min,maxtemperatur=temp_max)
 
 
 
