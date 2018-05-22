@@ -35,12 +35,28 @@ class saveData():
             mintemperatur(in Celsius): Float [-100,200]
             maxtemperatur(in Celsius): Float [-100,200]
             sonnenstunden: Float [0,24]
-            bewoelkung: Sting
+            bewoelkung: String
 
            """
+        #cast timestamp and timestamppred to DD-MM-YYYY
+
+        format = time.localtime(timestamp)
+        formatpred = time.localtime(timestamppred)
+
+        #Exceptions
 
         if type(timestamppred) != float:
             raise Exception("timestamppred ist kein Float")
+        if formatpred.tm_year != 2018:
+            raise Exception("timestamppred not in 2018")
+
+        if type(timestamp) != float:
+            raise Exception("timestamp ist kein Float")
+        if format.tm_year != 2018:
+            raise Exception("timestamp not in 2018")
+
+        if not validators.url(url):
+            raise Exception('Deine Url ist keine Url. Bashed!!')
 
         if (postleitzahl==None and stadt==None):
             raise Exception("Bitte gebe eine Stadt oder eine PLZ an!")
@@ -135,11 +151,11 @@ class saveData():
         if not os.path.exists("data"):
             os.makedirs("data")
 
+        #create filename
 
-
-
-        format=time.localtime(timestamp)
         filename=("data/")+str(format.tm_mday)+"-"+str(format.tm_mon)+"-"+ str(format.tm_year) +"_" + websitename
+
+        #create file if not existing
 
         if self.filename!=filename:
             self.filename=filename
@@ -149,12 +165,15 @@ class saveData():
             if os.path.exists(filename):
                 self.csvfile=open(filename,'a')
                 self.csvwriter = csv.writer(self.csvfile, delimiter=',',quoting=csv.QUOTE_ALL)
+
             else:
                 self.csvfile=open(filename,'w')
                 self.csvwriter = csv.writer(self.csvfile, delimiter=',')
                 self.csvwriter.writerow(["url", "timestamp", "timestamppred", "postleitzahl", "stadt", "temperatur", "niederschlagswahrscheinlichkeit", "niederschlagsmenge", "niederschlag", "windgeschwindigkeit",
                 "luftdruckground", "luftdrucksea", "mintemperatur", "maxtemperatur", "sonnenstunden", "bewoelkung"])
                 self.csvwriter = csv.writer(self.csvfile, delimiter=',',quoting=csv.QUOTE_ALL)
+
+        #save data to proper csv file
 
         self.csvwriter.writerow(
             [url, timestamp, timestamppred, postleitzahl, stadt, temperatur, niederschlagswahrscheinlichkeit, niederschlagsmenge, niederschlag, windgeschwindigkeit,
@@ -164,16 +183,7 @@ class saveData():
 
 
 
-    ''' check day 
-    - if day already: add to existing file
-
-    else: same new file
-    '''
-
-
-
-    ''' save to CSV '''
-
+# Beispielaufruf
 
 c=saveData()
 c.save("googlecom", "http://www.google.de", timestamp=time.time(),timestamppred=time.time(),postleitzahl= "61231",stadt="Berlin",  maxtemperatur=23.4, niederschlagswahrscheinlichkeit=80.20, windgeschwindigkeit=200.0,mintemperatur= 10.0 )
@@ -183,33 +193,4 @@ c.save("googlecom", "http://www.google.de", timestamp=time.time(),timestamppred=
 c.save("googlecom", "http://www.google.de", timestamp=time.time(),timestamppred=time.time(),postleitzahl= "61231",stadt="Berlin",  maxtemperatur=23.4, niederschlagswahrscheinlichkeit=80.20, windgeschwindigkeit=200.0,mintemperatur= 10.0 )
 c.save("googlecom", "http://www.google.de", timestamp=time.time(),timestamppred=time.time(),postleitzahl= "61231",stadt="Berlin",  maxtemperatur=23.4, niederschlagswahrscheinlichkeit=80.20, windgeschwindigkeit=200.0,mintemperatur= 10.0 )
 c.csvfile.close()
-
-
-'''
-
-
-
-class TestStringMethods(unittest.TestCase):
-    
-    
-    def test_plzkorrekt(selfs):
-        save()
-
-    def test_upper(self):
-        self.assertEqual('foo'.upper(), 'FOO')
-
-    def test_isupper(self):
-        self.assertTrue('FOO'.isupper())
-        self.assertFalse('Foo'.isupper())
-
-    def test_split(self):
-        s = 'hello world'
-        self.assertEqual(s.split(), ['hello', 'world'])
-        # check that s.split fails when the separator is not a string
-        with self.assertRaises(TypeError):
-            s.split(2)
-
-if __name__ == '__main__':
-    unittest.main()
-'''
 
