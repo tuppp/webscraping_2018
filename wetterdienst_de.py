@@ -7,6 +7,16 @@ import pandas as pd
 from dateutil.parser import parse
 import saveCSVModel
 
+
+
+
+
+
+#######AUFRUF : getDataForPlz("10247")
+
+
+
+
 def bereinigen(str):
 
     nstr = str.replace('\n', "")
@@ -93,6 +103,6 @@ def getDataForPlz(plz):
         c.save(url=x["url"], timestamp = time.time(), timestamppred = datetime.datetime.strptime(x["date"], "%d.%m.%Y").timestamp(), stadt="Berlin", mintemperatur= x["mintemp"], maxtemperatur= x["maxtemp"], websitename="WETTERCOM")
 
 
-getDataForPlz("10247")
+
 
 
