@@ -1,4 +1,4 @@
-
+import validators
 import pdb
 import os
 import csv
@@ -47,11 +47,13 @@ class saveData():
 
         if type(timestamppred) != float:
             raise Exception("timestamppred ist kein Float")
+
         if formatpred.tm_year != 2018:
             raise Exception("timestamppred not in 2018")
 
         if type(timestamp) != float:
             raise Exception("timestamp ist kein Float")
+
         if format.tm_year != 2018:
             raise Exception("timestamp not in 2018")
 
