@@ -13,6 +13,7 @@ import datetime
 import os
 import json
 import time
+import saveCSVModel as saveModel
 #import pdb
 
 dateString = datetime.datetime.today().strftime('%Y-%m-%d');
@@ -40,7 +41,9 @@ def getOpenWeatherMapData():
     "http://api.openweathermap.org/data/2.5/forecast?id=2879139&APPID=428ef9d699cb5963b396bd10215f2d3f",#leipzig
     ];
     returnList = [];
-    
+
+    file = saveModel.saveData();
+
     for url in urls:
         myResponse = requests.get(url);
 
@@ -49,17 +52,17 @@ def getOpenWeatherMapData():
             obj = myResponse.json(); 
 
             #save everything locally
-            if (os.path.exists(localJsonSavePath)):
-                with open(localJsonSavePath, 'a') as outfile:
-                    json.dump(obj, outfile);
-            else:
-                with open(localJsonSavePath, 'w') as outfile:
-                    json.dump(obj, outfile);
+            #if (os.path.exists(localJsonSavePath)):
+            #    with open(localJsonSavePath, 'a') as outfile:
+            #        json.dump(obj, outfile);
+            #else:
+            #    with open(localJsonSavePath, 'w') as outfile:
+            #        json.dump(obj, outfile);
             
             lat  = obj["city"]["coord"]["lat"];
             lang = obj["city"]["coord"]["lon"];
             stadt = obj["city"]["name"];
-            print(stadt,lat,lang);
+            #print(stadt,lat,lang);
             obj = obj["list"];
             
             
@@ -68,10 +71,7 @@ def getOpenWeatherMapData():
             for entry in obj:
                 
                 
-                timestamp = entry["dt_txt"];
-                print(timestamp)    
-                timestamp = datetime.datetime.strptime(timestamp);
-                print(timestamp)
+                timestamp = entry["dt"];
                 temperatur = kelvin_to_celcius(entry["main"]["temp"]);
                 mintemperatur = kelvin_to_celcius(entry["main"]["temp_min"]);
                 maxtemperatur = kelvin_to_celcius(entry["main"]["temp_max"]);
@@ -79,7 +79,7 @@ def getOpenWeatherMapData():
                 windgeschwindigkeit = meter_per_second_to_km_per_h(windgeschwindigkeit);
                 luftdruck = entry["main"]["grnd_level"];
                 
-                websiteNameShort = "".join(websiteName[11:].split('.'));
+                websiteNameShort = "openweathermaporg";
                 #save relevant data to csv file
 #==============================================================================
 #                 print(websiteNameShort, websiteName, 
@@ -92,23 +92,25 @@ def getOpenWeatherMapData():
 #                                    None, None);
 #==============================================================================
 
-                returnListEntry = [websiteNameShort, websiteName, 
-                                   time.time(), timestamp,      
-                                    None, stadt,
-                                   temperatur, None,None, 
-                                   None, windgeschwindigkeit, 
-                                   luftdruck, None, 
-                                   mintemperatur, maxtemperatur, 
-                                   None, None]
-                print(returnListEntry);
-                returnList.append(returnListEntry);
-            return returnList;        
+                file.save(websiteNameShort, websiteName,
+                          time.time(), float(timestamp),
+                          None, stadt,
+                          float(temperatur), None, None,
+                          None, float(windgeschwindigkeit),
+                          float(luftdruck), None,
+                          float(mintemperatur), float(maxtemperatur),
+                          None, None)
+
+                #print(returnListEntry);
+                #returnList.append(returnListEntry);
+            #return returnList;
 
         
         else:
           # If response code is not ok (200), print the resulting http error code with description
             myResponse.raise_for_status();
 
+    file.csvfile.close()
 
 #start
 getOpenWeatherMapData();
