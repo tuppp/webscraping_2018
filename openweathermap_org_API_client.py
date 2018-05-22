@@ -43,7 +43,7 @@ def save_raw_json_response(obj):
             json.dump(obj, outfile);
 
 #extracts all the data out of json and saves it 
-def extract_and_save_data(obj):
+def extract_and_save_data(obj, file):
     stadt = obj["city"]["name"];
     obj = obj["list"];
     
@@ -94,7 +94,7 @@ def getOpenWeatherMapData():
         if(myResponse.ok):
             obj = myResponse.json(); 
             save_raw_json_response(obj);
-            extract_and_save_data(obj);
+            extract_and_save_data(obj,file);
             
         else:
           # If response code is not ok (200), print the resulting http error code with description
