@@ -1,8 +1,8 @@
 #!/home/webcrawling/miniconda3/bin/python
 # -*- coding: utf-8 -*-
 
-from OpenWheatherMapRestClient import *
-from saveCSVModel import *
+# from OpenWheatherMapRestClient import *
+# from saveCSVModel import *
 
 
 def read_plz() -> list:
