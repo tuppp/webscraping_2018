@@ -33,11 +33,13 @@ def getAccuWeatherData():
     "http://dataservice.accuweather.com/forecasts/v1/daily/5day/170372?apikey=NWXSvpg68FDbYdNYneJnLWLZMZ5HwJu5&language=de&details=true&metric=true",#düsseldorf
     "http://dataservice.accuweather.com/forecasts/v1/daily/5day/170370?apikey=NWXSvpg68FDbYdNYneJnLWLZMZ5HwJu5&language=de&details=true&metric=true",#dortmund
     "http://dataservice.accuweather.com/forecasts/v1/daily/5day/170373?apikey=NWXSvpg68FDbYdNYneJnLWLZMZ5HwJu5&language=de&details=true&metric=true",#essen
-    "http://dataservice.accuweather.com/forecasts/v1/daily/5day/?apikey=NWXSvpg68FDbYdNYneJnLWLZMZ5HwJu5&language=de&details=true&metric=true",#leipzig
+    "http://dataservice.accuweather.com/forecasts/v1/daily/5day/171240?apikey=NWXSvpg68FDbYdNYneJnLWLZMZ5HwJu5&language=de&details=true&metric=true"#leipzig
     ];
-    staedte = ["Berlin", "Hamburg", "München","Köln","Frankfurt am Main", "Stuttgart", "Düsseldorf", "Dortmund", "Essen", "Leipzig"]    
+    staedte = ["Berlin", "Hamburg", "Muenchen","Koeln","Frankfurt am Main", "Stuttgart", "Duesseldorf", "Dortmund", "Essen", "Leipzig"]
     returnList = [];
-    
+
+    file = saveModel.saveData();
+
     for index,url in enumerate(urls):
         myResponse = requests.get(url);
         time.sleep(5);
@@ -58,8 +60,8 @@ def getAccuWeatherData():
             
             stadt = staedte[index];
             
-            print(stadt, dateString);
-            print("stadt","abfragedatum","timestamp","temp", "mintemp", "maxtemp", "wind","luftdruck","regen%","bewoelkung","sonnenstunden" );
+            #print(stadt, dateString);
+            #print("stadt","abfragedatum","timestamp","temp", "mintemp", "maxtemp", "wind","luftdruck","regen%","bewoelkung","sonnenstunden" );
             obj = obj["DailyForecasts"];
             
             
@@ -77,31 +79,34 @@ def getAccuWeatherData():
                 niederschlagsmenge = entry["Day"]["Rain"]["Value"];
                 bewoelkung = entry["Day"]["CloudCover"];
                 
-                websiteNameShort = "".join(websiteName[11:].split('.'));
+                websiteNameShort = "accuweathercom";
                 
-                file = saveModel.saveData();
+
                 file.save(websiteNameShort,websiteName, 
-                                   time.time(), timestamp,
+                                   time.time(), float(timestamp),
                                     None, stadt,
-                                   None, niederschlagswahrscheinlichkeit, niederschlagsmenge, 
-                                   None, windgeschwindigkeit, 
+                                   None, float(niederschlagswahrscheinlichkeit), float(niederschlagsmenge),
+                                   None, float(windgeschwindigkeit),
                                    None, None, 
-                                   mintemperatur, maxtemperatur, 
-                                   sonnenstunden, bewoelkung)
-                print(websiteNameShort,websiteName, 
-                                   time.time(), timestamp,
-                                    None, stadt,
-                                   None, niederschlagswahrscheinlichkeit, niederschlagsmenge, 
-                                   None, windgeschwindigkeit, 
-                                   None, None, 
-                                   mintemperatur, maxtemperatur, 
-                                   sonnenstunden, bewoelkung)
-            return 1;        
+                                   float(mintemperatur), float(maxtemperatur),
+                          float(sonnenstunden), str(bewoelkung))
+
+               # print(websiteNameShort,websiteName,
+               #                   time.time(), float(timestamp),
+               #                   None, stadt,
+               #                 None, float(niederschlagswahrscheinlichkeit), float(niederschlagsmenge),
+               #                None, float(windgeschwindigkeit),
+               #               None, None,
+               #              float(mintemperatur), float(maxtemperatur),
+               #    float(sonnenstunden), str(bewoelkung))
+            #return 1;
         
         else:
           # If response code is not ok (200), print the resulting http error code with description
-            myResponse.raise_for_status();
+           # print("hatte nisch jeklappt"+staedte[index])
+            myResponse.raise_for_status()
 
+    file.csvfile.close()
 
 #start
 getAccuWeatherData();
