@@ -117,7 +117,7 @@ def get_all_predictions(url):
         war_start = '2011-01-03'
 
         c = saveCSVModel.saveData()
-        c.save(websitename="wetter_com",url="https://www.wetter.com",timestamp=time.time(),timestamppred=date,postleitzahl=plz,niederschlagswahrscheinlichkeit=niederschlagwkt,mintemperatur=temp_min,maxtemperatur=temp_max)
+        c.save(websitename="wetter_com",url="https://www.wetter.com",timestamp=time.time(), timestamppred=date,postleitzahl=plz,niederschlagswahrscheinlichkeit=niederschlagwkt,mintemperatur=temp_min,maxtemperatur=temp_max)
 
 
 
