@@ -95,3 +95,4 @@ def getDataForPlz(plz):
 
 getDataForPlz("10247")
 
+
