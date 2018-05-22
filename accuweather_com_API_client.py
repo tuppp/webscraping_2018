@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 """
 Rest Client for getting a data from accuweather.org
-# username franz.1@campus.tu-berlin.de pw: passwort12
+use getAccuWeatherData()
+
+this code is not pretty yet, will be done next week
+
+username franz.1@campus.tu-berlin.de pw: passwort12
 
 @author:
 alexander franz 358870
