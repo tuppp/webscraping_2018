@@ -1,12 +1,11 @@
-import unittest
 import validators
-import re
 import pdb
 import os
 import csv
-import datetime
 import time
-def test(hi):
+
+
+def test(*_):
     pdb.set_trace()
 
 class saveData():
@@ -39,21 +38,6 @@ class saveData():
             bewoelkung: Sting
 
            """
-
-
-        '''Exception Handling'''
-
-        if type(websitename) != str:
-            raise Exception('websitename ist kein String')
-
-        if type(url) != str:
-            raise Exception('url ist kein String')
-
-        if not validators.url(url):
-            raise Exception('Deine Url ist keine Url. Bashed!!')
-
-        if type(timestamp) != float:
-            raise Exception("timestamp kein Float")
 
         if type(timestamppred) != float:
             raise Exception("timestamppred ist kein Float")
@@ -179,6 +163,7 @@ class saveData():
 
 
 
+
     ''' check day 
     - if day already: add to existing file
 
@@ -198,6 +183,7 @@ c.save("googlecom", "http://www.google.de", timestamp=time.time(),timestamppred=
 c.save("googlecom", "http://www.google.de", timestamp=time.time(),timestamppred=time.time(),postleitzahl= "61231",stadt="Berlin",  maxtemperatur=23.4, niederschlagswahrscheinlichkeit=80.20, windgeschwindigkeit=200.0,mintemperatur= 10.0 )
 c.save("googlecom", "http://www.google.de", timestamp=time.time(),timestamppred=time.time(),postleitzahl= "61231",stadt="Berlin",  maxtemperatur=23.4, niederschlagswahrscheinlichkeit=80.20, windgeschwindigkeit=200.0,mintemperatur= 10.0 )
 c.csvfile.close()
+
 
 '''
 
