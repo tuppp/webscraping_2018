@@ -1,4 +1,4 @@
-import validators
+
 import pdb
 import os
 import csv

@@ -3,7 +3,12 @@ from lxml import etree
 from xml.etree import ElementTree
 import re
 import saveCSVModel
-plz = ""
+import time
+import datetime
+from datetime import datetime
+from dateutil.parser import parse
+import pandas as pd
+plz = "10367"
 string_1 = 'https://www.wetter.com/suche/?q=10115'
 
 def loadsource(url: str):
@@ -24,6 +29,18 @@ def get_16_day_prediction(code):
     clean_html = dirty_html.split('"') [0]
     print(clean_html)
     get_all_predictions(clean_html)
+
+
+def string_to_date(string_s):
+    war_start = '2011-01-03'
+    string_s = string_s.split(" ") [1]
+    return time.mktime(datetime.strptime('2018-' + string_s.split(".")[1] + '-' + string_s.split(".")[0], '%Y-%m-%d').timetuple())
+def string_to_float(string_s):
+    value = re.findall(r'\d+', string_s)
+    if len(value) == 0 :
+        return float(0)
+    else:
+        return value[0]
 
 
 
@@ -72,29 +89,35 @@ def get_all_predictions(url):
 
 
         date = split42[0]
-        temp_max = split22[0]
-        temp_min = split32[0]
+        date = string_to_date(date)
+        temp_max = string_to_float(split22[0])
+        temp_min = string_to_float(split32[0])
+        print(type(temp_min))
         niederschlag = ""
         if(len(split72) > 1 ):
             niederschlag = split72[1]
         else:
             niederschlag = "0"
-
-        niederschlagwkt = split72[0]
-        sun_duration = split6fin [0]
-        weather_state = split52[0]
+        niederschlag = string_to_float(niederschlag)
+        niederschlagwkt = string_to_float(split72[0])
+        sun_duration = string_to_float(split6fin [0])
+        weather_state = string_to_float(split52[0])
 
 
 
         print(date)
         print (temp_min)
+        print(type(temp_min))
         print (temp_max)
         print(niederschlag)
         print(sun_duration)
         print(niederschlagwkt)
         print(weather_state)
 
-        saveCSVModel.save(url="https://www.wetter.com",timestamp=date,postleitzahl=plz,niederschlagswahrscheinlichkeit=niederschlagwkt,mintemperatur=temp_min,maxtemperatur=temp_max)
+        war_start = '2011-01-03'
+
+        c = saveCSVModel.saveData()
+        c.save(websitename="wetter_com",url="https://www.wetter.com",timestamp=time.time(),timestamppred=date,postleitzahl=plz,niederschlagswahrscheinlichkeit=niederschlagwkt,mintemperatur=temp_min,maxtemperatur=temp_max)
 
 
 
