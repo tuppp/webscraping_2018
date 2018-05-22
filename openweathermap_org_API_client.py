@@ -69,7 +69,9 @@ def getOpenWeatherMapData():
                 
                 
                 timestamp = entry["dt_txt"];
-                timestamp = time.mktime(datetime.datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S").timetuple());
+                print(timestamp)    
+                timestamp = datetime.datetime.strptime(timestamp);
+                print(timestamp)
                 temperatur = kelvin_to_celcius(entry["main"]["temp"]);
                 mintemperatur = kelvin_to_celcius(entry["main"]["temp_min"]);
                 maxtemperatur = kelvin_to_celcius(entry["main"]["temp_max"]);
@@ -98,7 +100,7 @@ def getOpenWeatherMapData():
                                    luftdruck, None, 
                                    mintemperatur, maxtemperatur, 
                                    None, None]
-                #print(returnListEntry);
+                print(returnListEntry);
                 returnList.append(returnListEntry);
             return returnList;        
 

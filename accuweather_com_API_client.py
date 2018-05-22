@@ -13,6 +13,8 @@ import datetime
 import os
 import json
 import time
+import saveCSVModel as saveModel
+import validators
 
 websiteName = "www.accuweather.com";
 dateString = datetime.datetime.today().strftime('%Y-%m-%d');
@@ -43,13 +45,15 @@ def getAccuWeatherData():
         if(myResponse.ok):
             obj = myResponse.json(); 
 
-            #save everything locally
-            if (os.path.exists(localJsonSavePath)):
-                with open(localJsonSavePath, 'a') as outfile:
-                    json.dump(obj, outfile);
-            else:
-                with open(localJsonSavePath, 'w') as outfile:
-                    json.dump(obj, outfile);
+#==============================================================================
+#             #save everything locally
+#             if (os.path.exists(localJsonSavePath)):
+#                 with open(localJsonSavePath, 'a') as outfile:
+#                     json.dump(obj, outfile);
+#             else:
+#                 with open(localJsonSavePath, 'w') as outfile:
+#                     json.dump(obj, outfile);
+#==============================================================================
             
             
             stadt = staedte[index];
@@ -69,27 +73,30 @@ def getAccuWeatherData():
                 maxtemperatur = entry["Temperature"]["Maximum"]["Value"];
                 sonnenstunden = entry["HoursOfSun"]
                 windgeschwindigkeit = entry["Day"]["Wind"]["Speed"]["Value"];
-                luftdruck = "None";
                 niederschlagswahrscheinlichkeit = entry["Day"]["RainProbability"];
                 niederschlagsmenge = entry["Day"]["Rain"]["Value"];
-                #postleitzahl = "None";
                 bewoelkung = entry["Day"]["CloudCover"];
-                #save relevant data to csv file
                 
                 websiteNameShort = "".join(websiteName[11:].split('.'));
-                print(stadt,dateString,timestamp,temperatur,mintemperatur,maxtemperatur,windgeschwindigkeit,luftdruck,niederschlagswahrscheinlichkeit,bewoelkung, sonnenstunden);
                 
-                returnListEntry = [websiteNameShort,websiteName, 
+                file = saveModel.saveData();
+                file.save(websiteNameShort,websiteName, 
                                    time.time(), timestamp,
                                     None, stadt,
                                    None, niederschlagswahrscheinlichkeit, niederschlagsmenge, 
                                    None, windgeschwindigkeit, 
                                    None, None, 
                                    mintemperatur, maxtemperatur, 
-                                   sonnenstunden, bewoelkung]
-                print(returnListEntry);
-                returnList.append(returnListEntry);
-            return returnList;        
+                                   sonnenstunden, bewoelkung)
+                print(websiteNameShort,websiteName, 
+                                   time.time(), timestamp,
+                                    None, stadt,
+                                   None, niederschlagswahrscheinlichkeit, niederschlagsmenge, 
+                                   None, windgeschwindigkeit, 
+                                   None, None, 
+                                   mintemperatur, maxtemperatur, 
+                                   sonnenstunden, bewoelkung)
+            return 1;        
         
         else:
           # If response code is not ok (200), print the resulting http error code with description
