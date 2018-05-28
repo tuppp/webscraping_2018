@@ -102,5 +102,8 @@ def getOpenWeatherMapData():
 
     file.csvfile.close()
 
-#start
-getOpenWeatherMapData();
+
+def run():
+    getOpenWeatherMapData()
+
+
