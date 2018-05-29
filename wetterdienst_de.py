@@ -29,7 +29,7 @@ def bereinigen(str):
 def getParseCode(plz):
     plz = plz.replace('\n', '')
     response = urlopen('https://www.wetterdienst.de/Deutschlandwetter/Suche/?q=' + plz + '&where=DE')
-    print ('https://www.wetterdienst.de/Deutschlandwetter/Suche/?q=' + plz + '&where=DE')
+
     html = response.read()
 
     return html
@@ -64,7 +64,7 @@ def getDataForPlz(plz):
             data = {}
             split2 = i.split("Details")
             data["url"] = url
-            print (url)
+
             date1 =  split2[0].split('<span class="forecast_timerange">')
             date = date1[1].split('<')[0]
             data["date"] = date
@@ -101,9 +101,9 @@ def getDataForPlz(plz):
 
             nList.append(data)
         except:
-            print("SOME ERROR LEL " + plz)
+            print("WETTERDIENST PLZ FEHLGESCHLAGEN: " + plz)
 
-    print (nList)
+
 
     c = saveCSVModel.saveData()
     for x in nList:
