@@ -82,17 +82,18 @@ def getOpenWeatherMapData():
     for index,zip_code in enumerate(zip_codes):
         if index % 60 == 0 and index != 0:
            time.sleep(61)
+
         myResponse = requests.get(url + zip_code.rstrip() + url_appendix)
 
+        #only write into file, when zip code is available
         if(myResponse.ok):
             obj = myResponse.json()
             save_raw_json_response(obj)
             extract_and_save_data(obj,file)
-        else:
-            #If response code is not ok (200), print the resulting http error code with description
-            myResponse.raise_for_status()
 
     file.csvfile.close()
 
 def run():
     getOpenWeatherMapData()
+
+getOpenWeatherMapData()
