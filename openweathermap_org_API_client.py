@@ -95,5 +95,3 @@ def getOpenWeatherMapData():
 
 def run():
     getOpenWeatherMapData()
-
-getOpenWeatherMapData()
