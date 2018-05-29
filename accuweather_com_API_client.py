@@ -51,7 +51,8 @@ def extract_and_save_data(obj, file,staedte,index):
         niederschlagsmenge = entry["Day"]["Rain"]["Value"];
         bewoelkung = entry["Day"]["CloudCover"]; 
         websiteNameShort = "accuweathercom";
-        
+
+
         file.save(websiteNameShort,websiteName, 
                   time.time(), float(timestamp),
                   None, stadt,
