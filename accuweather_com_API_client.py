@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """
 Rest Client for getting a data from accuweather.org
-use getAccuWeatherData()
+- using accuweather with zipcodes is close to impossible
+- this client gets weather forecast for the 10 biggest cities in germany  and nothing else
+- use getAccuWeatherData() to get data  or use (filename).run() 
 
-this code is not pretty yet, will be done next week
 
 username franz.1@campus.tu-berlin.de pw: passwort12
 
