@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """
 Rest Client for getting a data from accuweather.org
-use getAccuWeatherData()
+- using accuweather with zipcodes is close to impossible
+- this client gets weather forecast for the 10 biggest cities in germany  and nothing else
+- use getAccuWeatherData() to get data  or use (filename).run() 
 
-this code is not pretty yet, will be done next week
 
 username franz.1@campus.tu-berlin.de pw: passwort12
 
@@ -18,13 +19,49 @@ import os
 import json
 import time
 import saveCSVModel as saveModel
-import validators
 
-websiteName = "www.accuweather.com";
+websiteName = "http://www.accuweather.com";
 dateString = datetime.datetime.today().strftime('%Y-%m-%d');
 localJsonSavePath = "accuweather"+dateString+".txt";
 
+#saves raw json response for backup purposes -> maybe use other parts later on?
+def save_raw_json_response(obj):
+    if not os.path.exists("raw_data"):
+        os.makedirs("raw_data")
 
+    if (os.path.exists("raw_data/" + localJsonSavePath)):
+        with open("raw_data/" + localJsonSavePath, 'a') as outfile:
+            json.dump(obj, outfile);
+    else:
+        with open("raw_data/" +localJsonSavePath, 'w') as outfile:
+            json.dump(obj, outfile);
+
+#extracts all the data out of json and saves it 
+def extract_and_save_data(obj, file,staedte,index):
+    stadt = staedte[index];
+            
+    obj = obj["DailyForecasts"];
+    for entry in obj:   
+        timestamp = entry["EpochDate"];
+        mintemperatur = entry["Temperature"]["Minimum"]["Value"];
+        maxtemperatur = entry["Temperature"]["Maximum"]["Value"];
+        sonnenstunden = entry["HoursOfSun"]
+        windgeschwindigkeit = entry["Day"]["Wind"]["Speed"]["Value"];
+        niederschlagswahrscheinlichkeit = entry["Day"]["RainProbability"];
+        niederschlagsmenge = entry["Day"]["Rain"]["Value"];
+        bewoelkung = entry["Day"]["CloudCover"]; 
+        websiteNameShort = "accuweathercom";
+        
+        file.save(websiteNameShort,websiteName, 
+                  time.time(), float(timestamp),
+                  None, stadt,
+                  None, float(niederschlagswahrscheinlichkeit), float(niederschlagsmenge),
+                  None, float(windgeschwindigkeit),
+                  None, None, 
+                  float(mintemperatur), float(maxtemperatur),
+                  float(sonnenstunden), str(bewoelkung));
+
+#main
 def getAccuWeatherData():
     print("wir holen daten von accuweather per API")
     urls = [
@@ -40,77 +77,30 @@ def getAccuWeatherData():
     "http://dataservice.accuweather.com/forecasts/v1/daily/5day/171240?apikey=NWXSvpg68FDbYdNYneJnLWLZMZ5HwJu5&language=de&details=true&metric=true"#leipzig
     ];
     staedte = ["Berlin", "Hamburg", "Muenchen","Koeln","Frankfurt am Main", "Stuttgart", "Duesseldorf", "Dortmund", "Essen", "Leipzig"]
-    returnList = [];
 
+    #our own save function: saves everything into special csv file
     file = saveModel.saveData();
 
+    #do API call for all locations
     for index,url in enumerate(urls):
         myResponse = requests.get(url);
-        time.sleep(5);
-        
+
         if(myResponse.ok):
             obj = myResponse.json(); 
-
-#==============================================================================
-#             #save everything locally
-#             if (os.path.exists(localJsonSavePath)):
-#                 with open(localJsonSavePath, 'a') as outfile:
-#                     json.dump(obj, outfile);
-#             else:
-#                 with open(localJsonSavePath, 'w') as outfile:
-#                     json.dump(obj, outfile);
-#==============================================================================
-            
-            
-            stadt = staedte[index];
-            
-            #print(stadt, dateString);
-            #print("stadt","abfragedatum","timestamp","temp", "mintemp", "maxtemp", "wind","luftdruck","regen%","bewoelkung","sonnenstunden" );
-            obj = obj["DailyForecasts"];
-            
-            
-            
-            for entry in obj:
-                #print(entry);
-                
-                timestamp = entry["EpochDate"];
-                temperatur = "None";
-                mintemperatur = entry["Temperature"]["Minimum"]["Value"];
-                maxtemperatur = entry["Temperature"]["Maximum"]["Value"];
-                sonnenstunden = entry["HoursOfSun"]
-                windgeschwindigkeit = entry["Day"]["Wind"]["Speed"]["Value"];
-                niederschlagswahrscheinlichkeit = entry["Day"]["RainProbability"];
-                niederschlagsmenge = entry["Day"]["Rain"]["Value"];
-                bewoelkung = entry["Day"]["CloudCover"];
-                
-                websiteNameShort = "accuweathercom";
-                
-
-                file.save(websiteNameShort,websiteName, 
-                                   time.time(), float(timestamp),
-                                    None, stadt,
-                                   None, float(niederschlagswahrscheinlichkeit), float(niederschlagsmenge),
-                                   None, float(windgeschwindigkeit),
-                                   None, None, 
-                                   float(mintemperatur), float(maxtemperatur),
-                          float(sonnenstunden), str(bewoelkung))
-
-               # print(websiteNameShort,websiteName,
-               #                   time.time(), float(timestamp),
-               #                   None, stadt,
-               #                 None, float(niederschlagswahrscheinlichkeit), float(niederschlagsmenge),
-               #                None, float(windgeschwindigkeit),
-               #               None, None,
-               #              float(mintemperatur), float(maxtemperatur),
-               #    float(sonnenstunden), str(bewoelkung))
-            #return 1;
-        
+            save_raw_json_response(obj);
+            extract_and_save_data(obj,file,staedte,index);          
         else:
           # If response code is not ok (200), print the resulting http error code with description
-           # print("hatte nisch jeklappt"+staedte[index])
-            myResponse.raise_for_status()
+            myResponse.raise_for_status();
 
+        #this api doesnt want us to do bruteforce api calls,  we have to be patient ater each call
+        time.sleep(5);
+    #after doing all the api call calls an extracting all the data, close the csv and terminate
     file.csvfile.close()
+
+def run():
+  getAccuWeatherData();
+
 
 #start
 getAccuWeatherData();

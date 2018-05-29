@@ -6,11 +6,14 @@ is script is started with runClient.bash due to anaconda env needed for certain 
 
 import openweathermap_org_API_client
 import wetterdienst_de
+import accuweather_com_API_client
 
 def run():
     ''' run scripts like this. handle plz internally. sorry daniel for changes here.. '''
-    openweathermap_org_API_client.run()
+    accuweather_com_API_client.run()
     wetterdienst_de.start()
+    openweathermap_org_API_client.run()
+
 
 
 if __name__ == "__main__":
