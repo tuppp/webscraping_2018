@@ -4,7 +4,7 @@ Rest Client for getting a data from accuweather.org
 - using accuweather with zipcodes is close to impossible
 - this client gets weather forecast for the 10 biggest cities in germany  and nothing else
 - use getAccuWeatherData() to get data  or use (filename).run() 
-
+- if api call doesnt work, we dont throw an error or anything we just carry on
 
 username franz.1@campus.tu-berlin.de pw: passwort12
 
@@ -63,7 +63,7 @@ def extract_and_save_data(obj, file,staedte,index):
 
 #main
 def getAccuWeatherData():
-    print("wir holen daten von accuweather per API")
+    #print("wir holen daten von accuweather per API")
     urls = [
     "http://dataservice.accuweather.com/forecasts/v1/daily/5day/178087?apikey=NWXSvpg68FDbYdNYneJnLWLZMZ5HwJu5&language=de&details=true&metric=true", #berlin
     "http://dataservice.accuweather.com/forecasts/v1/daily/5day/178556?apikey=NWXSvpg68FDbYdNYneJnLWLZMZ5HwJu5&language=de&details=true&metric=true",#hamburg
@@ -88,11 +88,8 @@ def getAccuWeatherData():
         if(myResponse.ok):
             obj = myResponse.json(); 
             save_raw_json_response(obj);
-            extract_and_save_data(obj,file,staedte,index);          
-        else:
-          # If response code is not ok (200), print the resulting http error code with description
-            myResponse.raise_for_status();
-
+            extract_and_save_data(obj,file,staedte,index);  
+        #if http get didnt work somehow, we just ignore it        
         #this api doesnt want us to do bruteforce api calls,  we have to be patient ater each call
         time.sleep(5);
     #after doing all the api call calls an extracting all the data, close the csv and terminate
