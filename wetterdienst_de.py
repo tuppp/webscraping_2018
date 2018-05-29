@@ -17,6 +17,7 @@ import saveCSVModel
 
 
 
+
 def bereinigen(str):
 
     nstr = str.replace('\n', "")
@@ -105,4 +106,11 @@ def getDataForPlz(plz):
 
 
 
+
+
+def start():
+    with open('ZIP_Codes') as f:
+        for line in f:
+            print(line)
+            getDataForPlz("line")
 
