@@ -8,9 +8,13 @@ import datetime
 from datetime import datetime
 from dateutil.parser import parse
 import pandas as pd
+import runClient
 plz = "10367"
 string_1 = 'https://www.wetter.com/suche/?q=10115'
-
+counter = 0
+def increment_counter():
+    global counter
+    counter +=1
 def loadsource(url: str):
     code = urlopen(url, timeout=5)
     return code
@@ -19,16 +23,24 @@ def get_contents(plz):
     string_1 = 'https://www.wetter.com/suche/?q='
     url_final = string_1 + plz
     return loadsource(url_final)
+    print(plz + ":D:DD:D:D:D:D:D:D:DD:D:D:DD:D:D")
 
 def get_16_day_prediction(code):
     c1 = code.read()
     split_first = c1.decode().split('data-label="VHSTabZeitraum_16"')
-    split_first_2 = split_first [1]
-    dirty_html = split_first_2.split('href="')
-    dirty_html = dirty_html [1]
-    clean_html = dirty_html.split('"') [0]
-    print(clean_html)
-    get_all_predictions(clean_html)
+
+    try:
+
+        split_first_2 = split_first [1]
+        dirty_html = split_first_2.split('href="')
+        dirty_html = dirty_html [1]
+        clean_html = dirty_html.split('"') [0]
+        get_all_predictions(clean_html)
+    except:
+        increment_counter()
+        print("NICHTCRAWLBAR " + str(counter))
+
+
 
 
 def string_to_date(string_s):
@@ -59,7 +71,7 @@ def get_all_predictions(url):
     count = 0
     for html in split1:
         count = count +1
-        print(count)
+
 
 
         split2 = html.split('<span class="temp-max">')
@@ -77,7 +89,7 @@ def get_all_predictions(url):
         split62 = split6[1].split('</dd>')
         split63 = split62[0].split("<dd>")
         split6fin = split63[1]
-        print(split6fin)
+
 
 
         split7 = html.split('title="Niederschlagswahrscheinlichkeit">')
@@ -93,7 +105,7 @@ def get_all_predictions(url):
         date = string_to_date(date)
         temp_max = string_to_float(split22[0])
         temp_min = string_to_float(split32[0])
-        print(type(temp_min))
+
         niederschlag = ""
         if(len(split72) > 1 ):
             niederschlag = split72[1]
@@ -110,11 +122,20 @@ def get_all_predictions(url):
 
         c.save(websitename="wetter_com",url="https://www.wetter.com",timestamp=time.time(),timestamppred=date,postleitzahl=plz,niederschlagsmenge=niederschlag,sonnenstunden=sun_duration,niederschlagswahrscheinlichkeit=niederschlagwkt,mintemperatur=temp_min,maxtemperatur=temp_max)
 
+def read_plz_data():
+
+    plz_list = []
+    fp = open("ZIP_Codes")
+    for i, line in enumerate(fp):
+        plz_list.append(str(line))
+
+    return plz_list
+def predictions_plz(ziplist):
+    for i in ziplist:
+        print(i)
+        get_16_day_prediction(get_contents(i))
 
 
-
-
-
-get_16_day_prediction(get_contents('20149'))
-
+def start():
+    predictions_plz(read_plz_data())
 
