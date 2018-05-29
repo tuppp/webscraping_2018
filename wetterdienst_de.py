@@ -116,9 +116,11 @@ def getDataForPlz(plz):
 
 
 def start():
-    with open('ZIP_Codes') as f:
-        for line in f:
-            print(line)
+    try:
+        with open('ZIP_Codes') as f:
+         for line in f:
+           
             getDataForPlz(line)
-
+    except:
+        print("ERROR WETTERDIENST")
 start()
