@@ -71,36 +71,28 @@ def extract_and_save_data(obj, file):
 
 #main
 def getOpenWeatherMapData():
-    
-    print("wir holen daten von openweathermap.org per API")
-    urls = [
-    "http://api.openweathermap.org/data/2.5/forecast?id=2950159&APPID=428ef9d699cb5963b396bd10215f2d3f", #berlin
-    "http://api.openweathermap.org/data/2.5/forecast?id=6547395&APPID=428ef9d699cb5963b396bd10215f2d3f",#hamburg
-    "http://api.openweathermap.org/data/2.5/forecast?id=2867714&APPID=428ef9d699cb5963b396bd10215f2d3f",#münchen
-    "http://api.openweathermap.org/data/2.5/forecast?id=2886242&APPID=428ef9d699cb5963b396bd10215f2d3f",#köln
-    "http://api.openweathermap.org/data/2.5/forecast?id=2925533&APPID=428ef9d699cb5963b396bd10215f2d3f",#frankfurt am main
-    "http://api.openweathermap.org/data/2.5/forecast?id=2825297&APPID=428ef9d699cb5963b396bd10215f2d3f",#stuttgart
-    "http://api.openweathermap.org/data/2.5/forecast?id=2934245&APPID=428ef9d699cb5963b396bd10215f2d3f",#düsseldorf
-    "http://api.openweathermap.org/data/2.5/forecast?id=2935517&APPID=428ef9d699cb5963b396bd10215f2d3f",#dortmund
-    "http://api.openweathermap.org/data/2.5/forecast?id=2928809&APPID=428ef9d699cb5963b396bd10215f2d3f",#essen
-    "http://api.openweathermap.org/data/2.5/forecast?id=2879139&APPID=428ef9d699cb5963b396bd10215f2d3f",#leipzig
-    ];
-    file = saveModel.saveData();
+
+    file_object = open("ZIP_Codes", "r")
+    zip_codes = file_object.readlines()
+    url = "http://api.openweathermap.org/data/2.5/forecast?APPID=428ef9d699cb5963b396bd10215f2d3f&zip="
+    url_appendix = ",de"
+    file = saveModel.saveData()
 
     #do API call for all locations
-    for url in urls:
-        myResponse = requests.get(url);
+    for index,zip_code in enumerate(zip_codes):
+        if index % 60 == 0 and index != 0:
+           time.sleep(61)
+        myResponse = requests.get(url + zip_code.rstrip() + url_appendix)
 
         if(myResponse.ok):
-            obj = myResponse.json(); 
-            save_raw_json_response(obj);
-            extract_and_save_data(obj,file);
-            
+            obj = myResponse.json()
+            save_raw_json_response(obj)
+            extract_and_save_data(obj,file)
         else:
-          # If response code is not ok (200), print the resulting http error code with description
-            myResponse.raise_for_status();
+            #If response code is not ok (200), print the resulting http error code with description
+            myResponse.raise_for_status()
 
     file.csvfile.close()
 
-#start
-getOpenWeatherMapData();
+def run():
+    getOpenWeatherMapData()
