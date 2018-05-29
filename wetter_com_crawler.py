@@ -23,7 +23,7 @@ def get_contents(plz):
     string_1 = 'https://www.wetter.com/suche/?q='
     url_final = string_1 + plz
     return loadsource(url_final)
-    print(plz + ":D:DD:D:D:D:D:D:D:DD:D:D:DD:D:D")
+
 
 def get_16_day_prediction(code):
     c1 = code.read()
@@ -38,7 +38,8 @@ def get_16_day_prediction(code):
         get_all_predictions(clean_html)
     except:
         increment_counter()
-        print("NICHTCRAWLBAR " + str(counter))
+        print("PLZ nicht erkannt"
+              )
 
 
 
@@ -132,7 +133,6 @@ def read_plz_data():
     return plz_list
 def predictions_plz(ziplist):
     for i in ziplist:
-        print(i)
         get_16_day_prediction(get_contents(i))
 
 
