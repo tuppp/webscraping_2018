@@ -20,7 +20,7 @@ import json
 import time
 import saveCSVModel as saveModel
 
-websiteName = "www.accuweather.com";
+websiteName = "http://www.accuweather.com";
 dateString = datetime.datetime.today().strftime('%Y-%m-%d');
 localJsonSavePath = "accuweather"+dateString+".txt";
 
