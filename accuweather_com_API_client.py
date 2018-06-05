@@ -94,7 +94,7 @@ def getAccuWeatherData():
         #this api doesnt want us to do bruteforce api calls,  we have to be patient ater each call
         time.sleep(5);
     #after doing all the api call calls an extracting all the data, close the csv and terminate
-    #file.csvfile.close()
+    file.csvfile.close()
 
 def run():
   getAccuWeatherData();
