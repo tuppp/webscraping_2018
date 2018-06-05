@@ -190,6 +190,12 @@ class saveData():
             print("Error bei File Save!!" + traceback.print_exc())
 
 
+    def close(self):
+        if self.csvfile!=None:
+            self.csvfile.close()
+
+
+
 
 
 # Beispielaufruf
@@ -200,7 +206,7 @@ def example():
     c.save("googlecom", "http://www.google.de", timestamp=time.time(),timestamppred=time.time(),postleitzahl= "61231",stadt="Berlin",  maxtemperatur=23.4, niederschlagswahrscheinlichkeit=80.20, windgeschwindigkeit=200.0,mintemperatur= 10.0 )
     c.save("googlecom", "http://www.google.de", timestamp=time.time(),timestamppred=time.time(),postleitzahl= "61231",stadt="Berlin",  maxtemperatur=23.4, niederschlagswahrscheinlichkeit=80.20, windgeschwindigkeit=200.0,mintemperatur= 10.0 )
     c.save("googlecom", "http://www.google.de", timestamp=time.time(),timestamppred=time.time(),postleitzahl= "61231",stadt="Berlin",  maxtemperatur=23.4, niederschlagswahrscheinlichkeit=80.20, windgeschwindigkeit=200.0,mintemperatur= 10.0 )
-    c.csvfile.close()
+    c.close()
 
 def read_zip_codes():
     lines = [line.rstrip('\n') for line in open('ZIP_Codes')]

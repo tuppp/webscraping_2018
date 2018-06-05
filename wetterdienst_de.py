@@ -123,4 +123,4 @@ def start():
             getDataForPlz(line)
     except:
         print("ERROR WETTERDIENST")
-start()
+#start()

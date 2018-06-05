@@ -10,6 +10,7 @@ import accuweather_com_API_client
 import wetter_com_crawler
 
 def run():
+    print("hola")
     ''' run scripts like this. handle plz internally. sorry daniel for changes here.. '''
     accuweather_com_API_client.run()
     wetterdienst_de.start()

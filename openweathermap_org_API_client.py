@@ -91,7 +91,7 @@ def getOpenWeatherMapData():
             save_raw_json_response(obj)
             extract_and_save_data(obj,file)
 
-    file.csvfile.close()
+    file.close()
 
 def run():
     getOpenWeatherMapData()
