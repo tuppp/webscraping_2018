@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Filter geodata for our zipcodes
+Filter geodata for our zipcodes - just for Frontend
 
 @author:
 alexander franz 358870
