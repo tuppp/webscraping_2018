@@ -108,7 +108,7 @@ def getDataForPlz(plz):
     c = saveCSVModel.saveData()
     for x in nList:
 
-        c.save(url=x["url"], timestamp = time.time(), timestamppred = datetime.datetime.strptime(x["date"], "%d.%m.%Y").timestamp(), stadt="Berlin", mintemperatur= x["mintemp"], maxtemperatur= x["maxtemp"], websitename="WETTERDIENST")
+        c.save(url=x["url"], timestamp = time.time(), timestamppred = datetime.datetime.strptime(x["date"], "%d.%m.%Y").timestamp(),postleitzahl=plz, stadt="", mintemperatur= x["mintemp"], maxtemperatur= x["maxtemp"], websitename="WETTERDIENST")
 
 
 
