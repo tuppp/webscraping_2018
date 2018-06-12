@@ -10,6 +10,7 @@ from dateutil.parser import parse
 import pandas as pd
 import runClient
 
+
 string_1 = 'https://www.wetter.com/suche/?q=10115'
 counter = 0
 def increment_counter():
@@ -20,9 +21,11 @@ def loadsource(url: str):
     return code
 
 def get_contents(plz):
+
+    plzForModel = plz
     string_1 = 'https://www.wetter.com/suche/?q='
     url_final = string_1 + plz
-    return loadsource(url_final)
+    return loadsource(url_final), plz
 
 
 def get_16_day_prediction(code,plz):
@@ -64,10 +67,11 @@ def cleanhtml(raw_html):
 def get_all_predictions(url,plz):
     code = loadsource(url)
     new_code = code.read()
+    plz = plz.replace("\n","")
 
     split1 = new_code.decode().split(' class="weather-grid-item"')
 
-    read_plz_data('ZIP_Codes')
+
 
     split1.pop(0)
     count = 0
@@ -134,9 +138,10 @@ def read_plz_data():
     return plz_list
 def predictions_plz(ziplist):
     for i in ziplist:
-        get_16_day_prediction(get_contents(i),i)
+        get_16_day_prediction(*get_contents(i))
 
 
 def start():
     predictions_plz(read_plz_data())
 
+predictions_plz(read_plz_data())
