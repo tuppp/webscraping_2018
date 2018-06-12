@@ -9,7 +9,7 @@ from datetime import datetime
 from dateutil.parser import parse
 import pandas as pd
 import runClient
-plz = "10367"
+
 string_1 = 'https://www.wetter.com/suche/?q=10115'
 counter = 0
 def increment_counter():
@@ -25,7 +25,7 @@ def get_contents(plz):
     return loadsource(url_final)
 
 
-def get_16_day_prediction(code):
+def get_16_day_prediction(code,plz):
     c1 = code.read()
     split_first = c1.decode().split('data-label="VHSTabZeitraum_16"')
 
@@ -35,7 +35,7 @@ def get_16_day_prediction(code):
         dirty_html = split_first_2.split('href="')
         dirty_html = dirty_html [1]
         clean_html = dirty_html.split('"') [0]
-        get_all_predictions(clean_html)
+        get_all_predictions(clean_html,plz)
     except:
         increment_counter()
         print("PLZ nicht erkannt"
@@ -61,12 +61,13 @@ def cleanhtml(raw_html):
   cleanr = re.compile('<.*?>')
   cleantext = re.sub(cleanr, '', raw_html)
   return cleantext
-def get_all_predictions(url):
+def get_all_predictions(url,plz):
     code = loadsource(url)
     new_code = code.read()
 
     split1 = new_code.decode().split(' class="weather-grid-item"')
 
+    read_plz_data('ZIP_Codes')
 
     split1.pop(0)
     count = 0
@@ -133,7 +134,7 @@ def read_plz_data():
     return plz_list
 def predictions_plz(ziplist):
     for i in ziplist:
-        get_16_day_prediction(get_contents(i))
+        get_16_day_prediction(get_contents(i),i)
 
 
 def start():
