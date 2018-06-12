@@ -110,3 +110,7 @@ data/29-5-2018_WETTERCOM
 saveCSVModel.py
 saveCSVModel.py
 saveCSVModel.py
+
+# data
+data/
+raw_data/
