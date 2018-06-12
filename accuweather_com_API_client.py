@@ -87,18 +87,21 @@ def getAccuWeatherData():
         myResponse = requests.get(url);
 
         if(myResponse.ok):
-            obj = myResponse.json(); 
-            save_raw_json_response(obj);
-            extract_and_save_data(obj,file,staedte,index);  
+            obj = myResponse.json()
+            save_raw_json_response(obj)
+            extract_and_save_data(obj,file,staedte,index)
+        else:
+            if (myResponse.status_code == 503):
+                print("Maximum amount of requests reached. - accuweather -")
+                return
         #if http get didnt work somehow, we just ignore it        
         #this api doesnt want us to do bruteforce api calls,  we have to be patient ater each call
-        time.sleep(5);
+        time.sleep(5)
     #after doing all the api call calls an extracting all the data, close the csv and terminate
     file.close()
 
 def run():
-  getAccuWeatherData();
-
+  getAccuWeatherData()
 
 #start
 #getAccuWeatherData();
