@@ -1,0 +1,40 @@
+# -*- coding: utf-8 -*-
+"""
+Filter geodata for our zipcodes
+
+@author:
+alexander franz 358870
+daniel hartung 338991
+"""
+
+import json
+
+def gerZipToOurZip():
+
+    # read all geo data with corresponding zip codes
+    file_object = open("postleitzahlen.geojson", "r")
+    obj = file_object.read()
+    big_json = json.loads(obj)
+
+    # read our zip codes
+    file_object = open("ZIP_Codes", "r")
+    our_zip_codes = file_object.readlines()
+
+    new_list = []
+    # filter all zip codes we don´t need
+    for entry in big_json["features"]:
+        found_zipcode = ''
+        for zip_code in our_zip_codes:
+            if entry["properties"]["postcode"] == zip_code.rstrip():
+                found_zipcode = 'X'
+        if found_zipcode == 'X':
+            new_list.append(entry)
+
+    big_json["features"] = new_list
+
+    # open new target file for desired geo data and save it
+    target_file = open("zip_code_plus_geo_data.geojson", 'a')
+    json.dump(big_json, target_file)
+    target_file.close()
+
+gerZipToOurZip()
