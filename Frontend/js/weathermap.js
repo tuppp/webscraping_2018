@@ -1,5 +1,5 @@
 
-
+modus = "Temperatur";
 
 //initializing
 //var mymap = L.map("mapid1",{dragging : false}).setView([51.1130576,10.4233481], 6.5);
@@ -18,7 +18,10 @@ var listOfStates = data.features;
 for (var i = 0; i < listOfStates.length; i++){
 	listOfStates[i].properties.temperature = Math.random() * 30;
 }
-
+//set rainfall for debug purposes
+for (var i = 0; i < listOfStates.length; i++){
+  listOfStates[i].properties.rainfall = Math.random() * 1400;
+}
 
 
 
@@ -65,6 +68,8 @@ var geojson = L.geoJson(data, {
 
 //coloring
 function getColor(d) {
+
+  if (modus == "Temperatur"){
     return d > 30 ? '#800026' :
            d > 25  ? '#BD0026' :
            d > 20  ? '#E31A1C' :
@@ -73,12 +78,22 @@ function getColor(d) {
            d > 5   ? '#FEB24C' :
            d > 0   ? '#FED976' :
                       '#FFEDA0';
+  }
+  else if (modus == "Niederschlag"){
+    return  d < 200 ? '#f1eef6' :
+            d < 400 ? '#ece7f2' : 
+            d < 600 ? '#d0d1e6' :
+            d < 800 ? '#a6bddb' :
+            d <1000 ? '#3690c0' :
+            d <1200 ? '#0570b0' :
+                      '#034e7b' ;
+  }
 }
 
 //styles postal code based on temperature using getColor()
 function styleForState(feature) {
 	return {
-        fillColor: getColor(feature.properties.temperature),
+        fillColor: modus == "Temperatur" ? getColor(feature.properties.temperature) : getColor(feature.properties.rainfall),
         weight: 1,
         opacity: 1,
         color: 'white',
@@ -107,8 +122,19 @@ info.onAdd = function (map) {
 
 // method that we will use to update the control based on feature properties passed
 info.update = function (properties) {
+  if (modus == "Temperatur"){
     this._div.innerHTML = (
     	properties ? '<b>' + properties.locality + '<br> Temperatur : '+ Math.round(properties.temperature * 100) / 100  + ' °C</b>' : 'Hover over a state');
+  }
+  else if (modus == "Niederschlag"){
+    this._div.innerHTML = (
+      properties ? '<b>' + properties.locality + '<br> Niederschlag : '+ Math.round(properties.rainfall * 100) / 100  + ' mm</b>' : 'Hover over a state');
+  
+  }
+  else{
+    console.log("fehler bei globaler variable modus");
+  }
+
 };
 info.addTo(mymap);
 
@@ -116,31 +142,21 @@ info.addTo(mymap);
 var legend = L.control({position: 'bottomright'});
 legend.onAdd = function (map) {
 
-
+//TODO noch niederschlag dazu
   var div = L.DomUtil.create('div', 'info legend'),
-      grades = [0, 5, 10, 15, 20, 25, 30],
-      labels = [];
+      grades = [0, 5, 10, 15, 20, 25, 30];
+  $(div).attr('id', 'legendenSkala');
   div.innerHTML += '<h4> Temperatur Skala</h4>'    
   // loop through our density intervals and generate a label with a colored square for each interval
   for (var i = 0; i < grades.length; i++) {
       div.innerHTML +=
           '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
-          grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '°C<br>' : '°C+');
+          grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '°C<br>' : '°C+<br>');
   }
+  
+  addModusButton(div);
 
-  var changeButton = L.DomUtil.create('button');
-  $(changeButton).attr('type','button');
-  changeButton.innerHTML = 'Temperatur';
-  $(changeButton).click(function(){
-    if (this.innerHTML == 'Temperatur'){
-      this.innerHTML = 'Niederschlag';
-    }
-    else{
-      this.innerHTML = 'Temperatur';
-    }
-  })
-
-  $(div).append(changeButton);
+  
   return div;
 };
 legend.addTo(mymap);
@@ -193,16 +209,32 @@ sliderControl.addTo(mymap);
 //slider functionality
 function updateAllStates(time){
 	
-    $(jahrrangesliderText).text(time);
+  if (typeof time === "undefined" ){
+    console.log("update all states with undefined");
+    return 0;
+  }
+  //update text next to slider
+  $(jahrrangesliderText).text(time);
 
     //remoe old layer
 	geojson.clearLayers();
-	console.log("update alle states" + time);
+	console.log("update alle states für das jahr" + time);
 
+  if (modus == "Temperatur"){
 	//set temperature for debug purposes
-	for (var i = 0; i < listOfStates.length; i++){
-		listOfStates[i].properties.temperature = Math.random() * 30;
-	}
+  	for (var i = 0; i < listOfStates.length; i++){
+  		listOfStates[i].properties.temperature = Math.random() * 30;
+  	}
+  }
+  else if (modus == "Niederschlag"){
+    //set rainfall for debug purposes
+    for (var i = 0; i < listOfStates.length; i++){
+      listOfStates[i].properties.rainfall = Math.random() * 1400;
+    }
+  }
+  else{
+     console.log("fehler globale variable");
+  }
 	//add to map
 	geojson.addData(data)
 	//geojson.setStyle(styleForState);
@@ -210,3 +242,79 @@ function updateAllStates(time){
 	
 }
 
+
+function updateLegende(){
+
+  //reset old inner html 
+  $('#legendenSkala').innerHTML ="";
+  var div = document.getElementById('legendenSkala');
+  div.innerHTML = "";
+
+  //and replace with new 
+  if (modus == "Temperatur"){
+
+    grades = [0, 5, 10, 15, 20, 25, 30];
+    div.innerHTML += '<h4> Temperatur Skala</h4>'    
+    // loop through our density intervals and generate a label with a colored square for each interval
+    for (var i = 0; i < grades.length; i++) {
+        div.innerHTML +=
+            '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '°C<br>' : '°C+<br>');
+    }
+  
+  }
+  else if (modus == "Niederschlag"){
+    grades = [0, 200, 400, 600, 800, 1000, 1200];
+    div.innerHTML += '<h4> Niederschlag Skala</h4>'    
+    // loop through our density intervals and generate a label with a colored square for each interval
+    for (var i = 0; i < grades.length; i++) {
+        div.innerHTML +=
+            '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + ' mm<br>' : 'mm+<br>');
+    }
+  
+  }
+  else{
+     console.log("fehler globale variable");
+  }
+
+
+  //add button again
+  addModusButton(div);
+}
+
+
+function addModusButton(div){
+  //button to switch between temperatur and niederschlag
+  var changeButton = L.DomUtil.create('button');
+  $(changeButton).attr('type','button');
+  changeButton.innerHTML = "modus";
+
+  $(changeButton).click(function(){
+    if (modus == "Temperatur"){
+      modus = "Niederschlag";
+    }
+    else  if(modus = "Niederschlag"){
+      modus = "Temperatur";
+    }
+    else{
+      console.log("error globale variable");
+    }
+   
+    updateAllStates($('#jahrrangeslider').attr('value'));
+    updateLegende();
+  })
+
+  //disable dragging or zooming the map while over GUI
+   $(div).mouseover(function() {
+    mymap.dragging.disable();
+    mymap.doubleClickZoom.disable();  
+   });
+   $(div).mouseout(function() {
+    mymap.dragging.enable();
+    mymap.doubleClickZoom.enable();
+   });
+
+  $(div).append(changeButton);
+
+}
