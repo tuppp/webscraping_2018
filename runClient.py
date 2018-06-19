@@ -11,19 +11,19 @@ import wetter_com_crawler
 import datetime
 
 def run():
-    print("hola")
-    ''' run scripts like this. handle plz internally. sorry daniel for changes here.. '''
-    print("Acu:" + str(datetime.datetime.now()))
-    accuweather_com_API_client.run()
 
     print("Wetterdienst:" + str(datetime.datetime.now()))
     wetterdienst_de.start()
 
+    print("WEtter.com" + str(datetime.datetime.now()))
+    wetter_com_crawler.start()
+
+
     print("Openweathermap" + str(datetime.datetime.now()))
     openweathermap_org_API_client.run()
 
-    print("WEtter.com" + str(datetime.datetime.now()))
-    wetter_com_crawler.start()
+    print("Acu:" + str(datetime.datetime.now()))
+    accuweather_com_API_client.run()
 
 
 
