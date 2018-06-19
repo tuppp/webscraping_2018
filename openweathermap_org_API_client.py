@@ -43,7 +43,7 @@ def save_raw_json_response(obj):
             json.dump(obj, outfile);
 
 #extracts all the data out of json and saves it 
-def extract_and_save_data(obj, file):
+def extract_and_save_data(obj, file, zip_code):
     stadt = obj["city"]["name"];
     obj = obj["list"];
     
@@ -61,7 +61,7 @@ def extract_and_save_data(obj, file):
         #save relevant data to csv file
         file.save(websiteNameShort, websiteName,
                   time.time(), float(timestamp),
-                  None, stadt,
+                  zip_code, stadt,
                   float(temperatur), None, None,
                   None, float(windgeschwindigkeit),
                   float(luftdruck), None,
@@ -89,7 +89,7 @@ def getOpenWeatherMapData():
         if(myResponse.ok):
             obj = myResponse.json()
             save_raw_json_response(obj)
-            extract_and_save_data(obj,file)
+            extract_and_save_data(obj,file,zip_code.rstrip())
 
     file.close()
 
