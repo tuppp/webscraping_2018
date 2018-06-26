@@ -86,7 +86,7 @@ function getColor(d) {
             d < 800 ? '#a6bddb' :
             d <1000 ? '#3690c0' :
             d <1200 ? '#0570b0' :
-                      '#034e7b' ;
+                      '#034e7b' ; 
   }
 }
 
@@ -288,14 +288,28 @@ function addModusButton(div){
   //button to switch between temperatur and niederschlag
   var changeButton = L.DomUtil.create('button');
   $(changeButton).attr('type','button');
-  changeButton.innerHTML = "modus";
+  //changeButton.innerHTML = "modus";
+
+  changeButton.innerText = (modus == 'Temperatur') ? 'Temperatur' : 'Niederschlag';
+  changeButton.style.background= (modus == 'Temperatur') ? 'rgba(128, 0, 38, 0.5)' : 'rgba(3, 78, 123, 0.5)';
+  changeButton.style.color= 'white';
 
   $(changeButton).click(function(){
     if (modus == "Temperatur"){
+      //$('#divuntenlinks').css('background-color','#99ccff');
+      //$('.legend, .info').css('background-color','#99ccff');
+      $('.legend, .info').css('background','linear-gradient( rgba(241, 238, 246, 0.2), rgba(3, 78, 123, 0.2))');
       modus = "Niederschlag";
+      
+      //$(this).css('color','#99ccff');
     }
     else  if(modus = "Niederschlag"){
       modus = "Temperatur";
+      //$('.legend, .info').css('background-color','#ffd1b3');
+      $('.legend, .info').css('background','linear-gradient( rgba(255, 237, 160, 0.2) , rgba(128, 0, 38, 0.2))');
+      
+      //$(this).css('color','#ffd1b3');
+      //$('#divuntenlinks').css('background-color',' #ffd1b3');
     }
     else{
       console.log("error globale variable");
