@@ -117,6 +117,9 @@ var info = L.control();
 info.onAdd = function (map) {
     this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
     this.update();
+    this._div.style.background= (modus == 'Temperatur') ? 'linear-gradient( rgba(255, 237, 160, 0.2) , rgba(128, 0, 38, 0.2))' : 'linear-gradient( rgba(241, 238, 246, 0.2), rgba(3, 78, 123, 0.2))';
+    
+
     return this._div;
 };
 
@@ -145,6 +148,8 @@ legend.onAdd = function (map) {
 //TODO noch niederschlag dazu
   var div = L.DomUtil.create('div', 'info legend'),
       grades = [0, 5, 10, 15, 20, 25, 30];
+  div.style.background= (modus == 'Temperatur') ? 'linear-gradient( rgba(255, 237, 160, 0.2) , rgba(128, 0, 38, 0.2))' : 'linear-gradient( rgba(241, 238, 246, 0.2), rgba(3, 78, 123, 0.2))';
+
   $(div).attr('id', 'legendenSkala');
   div.innerHTML += '<h4> Temperatur Skala</h4>'    
   // loop through our density intervals and generate a label with a colored square for each interval
@@ -167,8 +172,7 @@ var sliderControl = L.control({position: 'bottomleft'});
 sliderControl.onAdd = function (map) {
 	 var div = L.DomUtil.create('div', 'info legend');
 	 $(div).attr('id', 'divuntenlinks');
-	 
-
+	 div.style.background= (modus == 'Temperatur') ? 'linear-gradient( rgba(255, 237, 160, 0.2) , rgba(128, 0, 38, 0.2))' : 'linear-gradient( rgba(241, 238, 246, 0.2), rgba(3, 78, 123, 0.2))';
 	 var jahresslider = $('<input/>', {
 	 	type:"range",
 	 	id:"jahrrangeslider",
@@ -307,7 +311,6 @@ function addModusButton(div){
       modus = "Temperatur";
       //$('.legend, .info').css('background-color','#ffd1b3');
       $('.legend, .info').css('background','linear-gradient( rgba(255, 237, 160, 0.2) , rgba(128, 0, 38, 0.2))');
-      
       //$(this).css('color','#ffd1b3');
       //$('#divuntenlinks').css('background-color',' #ffd1b3');
     }
