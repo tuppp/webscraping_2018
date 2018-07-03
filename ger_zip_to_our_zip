@@ -29,14 +29,14 @@ def gerZipToOurZip():
                 found_zipcode = 'X'
         if found_zipcode == 'X':
             new_list.append(entry)
+            #print(entry["properties"]["postcode"])
 
-    big_json["features"] = new_list
+    sorted_new_list = sorted(new_list, key=lambda x: x["properties"]["postcode"])
+    big_json["features"] = sorted_new_list
 
     # open new target file for desired geo data and save it
     target_file = open("zip_code_plus_geo_data.geojson", 'a', encoding="utf-8-sig")
     json.dump(big_json, target_file, ensure_ascii=False)
     target_file.close()
-
-
 
 gerZipToOurZip()
