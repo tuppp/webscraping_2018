@@ -9,7 +9,8 @@ daniel hartung 338991
 
 import json
 
-def gerZipToOurZip():
+
+def ger_zip_to_our_zip():
 
     # read all geo data with corresponding zip codes
     file_object = open("postleitzahlen.geojson", "r", encoding="utf-8-sig")
@@ -29,7 +30,7 @@ def gerZipToOurZip():
                 found_zipcode = 'X'
         if found_zipcode == 'X':
             new_list.append(entry)
-            #print(entry["properties"]["postcode"])
+            # print(entry["properties"]["postcode"])
 
     sorted_new_list = sorted(new_list, key=lambda x: x["properties"]["postcode"])
     big_json["features"] = sorted_new_list
@@ -39,4 +40,6 @@ def gerZipToOurZip():
     json.dump(big_json, target_file, ensure_ascii=False)
     target_file.close()
 
-gerZipToOurZip()
+
+if __name__ == "__main__":
+    ger_zip_to_our_zip()
