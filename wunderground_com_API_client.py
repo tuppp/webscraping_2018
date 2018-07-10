@@ -78,7 +78,7 @@ def getWunderGroundData():
     zip_codes = file_object.readlines()
     url = "http://api.wunderground.com/api/2203c5d493156b15/forecast10day/q/Germany/"
     url_appendix = ".json"
-    file = saveModel.saveData()
+    file = saveModel.SaveData()
     banned_list = ["38879", "63934", "96157", "08527", "97450", "06268", "15907", "17322", "17039", "76534",
                    "36039", "04758", "64850", "98559", "79379", "56626", "89407", "65529", "01773", "83552",
                    "63071", "95030", "24326", "48268", "91322", "72469", "73667", "29614", "51061", "25917",

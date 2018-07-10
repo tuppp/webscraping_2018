@@ -122,9 +122,7 @@ def get_all_predictions(url,plz):
         sun_duration = string_to_float(split6fin)
         weather_state = string_to_float(split52[0])
 
-
-
-        c = saveCSVModel.saveData()
+        c = saveCSVModel.SaveData()
 
         c.save(websitename="wetter_com",url="https://www.wetter.com",timestamp=time.time(),timestamppred=date,postleitzahl=plz,niederschlagsmenge=niederschlag,sonnenstunden=sun_duration,niederschlagswahrscheinlichkeit=niederschlagwkt,mintemperatur=temp_min,maxtemperatur=temp_max)
 

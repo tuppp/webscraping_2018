@@ -88,7 +88,7 @@ def run():
     zip_codes = file_object.readlines()
     url = "http://api.openweathermap.org/data/2.5/forecast?APPID=428ef9d699cb5963b396bd10215f2d3f&zip="
     url_appendix = ",de"
-    file = saveModel.saveData()
+    file = saveModel.SaveData()
 
     # do API call for all locations
     for index, zip_code in enumerate(zip_codes):

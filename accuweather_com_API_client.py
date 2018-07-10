@@ -106,7 +106,7 @@ def run():
                 "171240?apikey=NWXSvpg68FDbYdNYneJnLWLZMZ5HwJu5&language=de&details=true&metric=true")
 
     # our own save function: saves everything into special csv file
-    file = saveModel.saveData()
+    file = saveModel.SaveData()
 
     # do API call for all locations
     for index, url in enumerate(urls):
