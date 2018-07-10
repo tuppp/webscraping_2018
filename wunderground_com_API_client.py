@@ -21,12 +21,16 @@ localJsonSavePath = "wunderground"+dateString+".txt"
 websiteName = "http://api.wunderground.com"
 websiteNameShort = "wunderground"
 
-# saves raw json response for backup purposes -> maybe use other parts later on?
+
 def save_raw_json_response(obj):
+    """
+    saves raw json response for backup purposes -> maybe use other parts later on?
+    """
+
     if not os.path.exists("raw_data"):
         os.makedirs("raw_data")
 
-    if (os.path.exists("raw_data/" + localJsonSavePath)):
+    if os.path.exists("raw_data/" + localJsonSavePath):
         with open("raw_data/" + localJsonSavePath, 'a') as outfile:
             json.dump(obj, outfile)
     else:
@@ -34,8 +38,11 @@ def save_raw_json_response(obj):
             json.dump(obj, outfile)
 
 
-# extracts all the data out of json and saves it
 def extract_and_save_data(obj, plz, file):
+    """
+    extracts all the data out of json and saves it:
+    """
+
     if "forecast" not in obj:
         print(plz)
         return
@@ -44,10 +51,10 @@ def extract_and_save_data(obj, plz, file):
         # extract data from response
         timestamp = entry["date"]["epoch"]
         mintemperatur = entry["low"]["celsius"]
-        if (float(mintemperatur) <= -100 or float(mintemperatur) >= 200):
+        if float(mintemperatur) <= -100 or float(mintemperatur) >= 200:
             print(plz)
             return
-        if entry["high"]["celsius"] :
+        if entry["high"]["celsius"]:
             maxtemperatur = entry["high"]["celsius"]
         else:
             maxtemperatur = "0"
@@ -57,8 +64,10 @@ def extract_and_save_data(obj, plz, file):
             niederschlagsmenge = entry["qpf_allday"]["mm"]
         else:
             niederschlagsmenge = 0
-        #if niederschlagsmenge is None:
+
+        # if niederschlagsmenge is None:
         #    niederschlagsmenge = 0
+
         # save relevant data to csv file
         file.save(websiteNameShort, websiteName,
                   time.time(), float(timestamp),
@@ -72,8 +81,8 @@ def extract_and_save_data(obj, plz, file):
                   None,
                   "")
 
-def getWunderGroundData():
 
+def get_wunder_ground_data():
     file_object = open("ZIP_Codes", "r")
     zip_codes = file_object.readlines()
     url = "http://api.wunderground.com/api/2203c5d493156b15/forecast10day/q/Germany/"
@@ -122,15 +131,19 @@ def getWunderGroundData():
     for index, zip_code in enumerate(zip_codes):
         if zip_code.rstrip() in banned_list:
             continue
-        myResponse = requests.get(url + zip_code.rstrip() + url_appendix)
+        my_response = requests.get(url + zip_code.rstrip() + url_appendix)
 
         # only write into file, when zip code is available
-        if (myResponse.ok):
-            obj = myResponse.json()
+        if my_response.ok:
+            obj = my_response.json()
             save_raw_json_response(obj)
             extract_and_save_data(obj, zip_code, file)
         time.sleep(6)
-def run():
-    getWunderGroundData()
 
-getWunderGroundData()
+
+def run():
+    get_wunder_ground_data()
+
+
+if __name__ == "__main__":
+    get_wunder_ground_data()
