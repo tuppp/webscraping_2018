@@ -14,7 +14,7 @@ import os
 import json
 import saveCSVModel as saveModel
 import time
-import pdb
+# import pdb
 
 dateString = datetime.datetime.today().strftime('%Y-%m-%d')
 localJsonSavePath = "wunderground"+dateString+".txt"
