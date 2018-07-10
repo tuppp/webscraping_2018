@@ -37,9 +37,9 @@ function getDataforYear(year){
 
 	if (modus == 'Temperatur'){
 		var query = '?year=' + year;
-		$.get('/averagetemp' + query, function(jsondata){
+		$.get('http://127.0.0.1:8000/avgtemp' + query, function(jsondata){
 			for (var i = 0; i < listOfStates.length; i++){
-				listOfStates[i].properties.temperature = jsondata.temp[i];
+				listOfStates[i].properties.temperature = jsondata[i];
 			}
 			//add new data to map
 			geojson.addData(data)
@@ -48,10 +48,10 @@ function getDataforYear(year){
 	} 
 	else if (modus == 'Niederschlag'){
 		var query = '?year=' + year;
-		$.get('/averagerain' + query, function(jsondata){
+		$.get('http://127.0.0.1:8000/avgrain' + query, function(jsondata){
 		
 			for (var i = 0; i < listOfStates.length; i++){
-			  listOfStates[i].properties.rainfall = jsondata.rain[i];
+			  listOfStates[i].properties.rainfall = jsondata[i];
 			}
 			//add new data to map
 			geojson.addData(data)
