@@ -3,8 +3,8 @@ from urllib.request import urlopen
 import re
 import time
 import datetime
-import pandas as pd
-from dateutil.parser import parse
+# import pandas as pd
+# from dateutil.parser import parse
 import saveCSVModel
 
 

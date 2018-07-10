@@ -1,14 +1,14 @@
 from urllib.request import urlopen
-from lxml import etree
-from xml.etree import ElementTree
+# from lxml import etree
+# from xml.etree import ElementTree
 import re
 import saveCSVModel
 import time
 import datetime
 from datetime import datetime
-from dateutil.parser import parse
-import pandas as pd
-import runClient
+# from dateutil.parser import parse
+# import pandas as pd
+# import runClient
 
 
 string_1 = 'https://www.wetter.com/suche/?q=10115'
