@@ -9,7 +9,6 @@ import os
 import sys
 import datetime
 
-os.chdir(os.path.dirname(os.path.abspath(sys.argv[0])))
 import openweathermap_org_API_client
 import wetterdienst_de
 import accuweather_com_API_client
@@ -31,4 +30,5 @@ def run():
 
 
 if __name__ == "__main__":
+    assert(os.path.dirname(os.path.abspath(sys.argv[0])) == os.getcwd())
     run()
