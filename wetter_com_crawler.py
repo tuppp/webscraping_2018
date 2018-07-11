@@ -130,4 +130,5 @@ def start():
     predictions_plz(read_plz_data())
 
 
-predictions_plz(read_plz_data())
+if __name__ == "__main__":
+    predictions_plz(read_plz_data())
