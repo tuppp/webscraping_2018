@@ -31,4 +31,5 @@ def run():
 
 if __name__ == "__main__":
     assert(os.path.dirname(os.path.abspath(sys.argv[0])) == os.getcwd())
+    print("Start running crawler at " + str(datetime.datetime.now()))
     run()
